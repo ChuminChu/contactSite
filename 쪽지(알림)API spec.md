@@ -136,4 +136,4 @@
     - **RequestHeader**:
         - (String) `authorization`: 토큰
 - **RequestBody**:
-    - (개발자) `developerName`: 개발자
+    - (개발자) `developerName`: 개발자 
