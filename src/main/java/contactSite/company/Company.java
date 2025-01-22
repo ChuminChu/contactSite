@@ -14,7 +14,7 @@ public class Company {
             strategy = "contactSite.company.CustomIdGenerator",
             parameters = @Parameter(name = "prefix", value = "C")
     )
-    private Long id;
+    private String id;
 
     //아이디, 비밀번호, 이름 - 필수 입력
     @Column(nullable = false, unique = true)
@@ -30,8 +30,9 @@ public class Company {
     private String businessType;
     private String field;
 
-    //웹사이트, 설립년도, 자기소개, 사원수
+    //웹사이트, 주소, 설립년도, 자기소개, 사원수
     private String website;
+    private String address;
     private int employeeCount;
     private String introduction;
     private int established;  //설립년도
@@ -42,13 +43,14 @@ public class Company {
     protected Company() {
     }
 
-    public Company(String userId, String password, String companyname, String businessType, String field, String website, int employeeCount, String introduction, int established) {
+    public Company(String userId, String password, String companyname, String businessType, String field, String website, String address, int employeeCount, String introduction, int established) {
         this.userId = userId;
         this.password = password;
         this.companyname = companyname;
         this.businessType = businessType;
         this.field = field;
         this.website = website;
+        this.address = address;
         this.employeeCount = employeeCount;
         this.introduction = introduction;
         this.established = established;
@@ -58,10 +60,9 @@ public class Company {
         this.likeCount = likeCount;
     }
 
+
     //getter
-
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -89,6 +90,10 @@ public class Company {
         return website;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public int getEmployeeCount() {
         return employeeCount;
     }
@@ -104,6 +109,7 @@ public class Company {
     public int getLikeCount() {
         return likeCount;
     }
+
 
     //setter - 아이디는 수정 안함
     public void setPassword(String password) {
@@ -126,6 +132,10 @@ public class Company {
         this.website = website;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public void setEmployeeCount(int employeeCount) {
         this.employeeCount = employeeCount;
     }
@@ -141,4 +151,5 @@ public class Company {
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
     }
+
 }
