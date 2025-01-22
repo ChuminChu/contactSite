@@ -11,7 +11,7 @@ public class Company {
     @GeneratedValue(generator = "custom-id-generator")
     @GenericGenerator(
             name = "custom-id-generator",
-            strategy = "contackSite.CustomIdGenerator",
+            strategy = "contactSite.company.CustomIdGenerator",
             parameters = @Parameter(name = "prefix", value = "C")
     )
     private Long id;
@@ -42,7 +42,7 @@ public class Company {
     protected Company() {
     }
 
-    public Company(String userId, String password, String companyname, String businessType, String field, String website, int employeeCount, String introduction, int established, int likeCount) {
+    public Company(String userId, String password, String companyname, String businessType, String field, String website, int employeeCount, String introduction, int established) {
         this.userId = userId;
         this.password = password;
         this.companyname = companyname;
@@ -52,6 +52,9 @@ public class Company {
         this.employeeCount = employeeCount;
         this.introduction = introduction;
         this.established = established;
+    }
+
+    public Company(int likeCount) {
         this.likeCount = likeCount;
     }
 
