@@ -40,7 +40,6 @@
         - `personalHistory` (Number): 경력
         - **field** (Array):
             - `fieldName` (String): 분야 이름
-        - `likeCount` (Number): 좋아요 개수
 
 ---
 
@@ -62,7 +61,6 @@
             - `fieldName` (String): 분야 이름
         - `selfIntroduction` (String): 자기 소개
         - `certificate` (String): 자격증
-        - `likeCount` (Number): 좋아요 개수
 
 ---
 
