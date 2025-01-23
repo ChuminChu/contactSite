@@ -6,7 +6,9 @@ import contactSite.company.Company;
 import contactSite.company.CompanyRepository;
 import contactSite.programmer.Programmer;
 import contactSite.programmer.ProgrammerRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoginService {
 
     private final ProgrammerRepository programmerRepository;
