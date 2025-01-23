@@ -1,5 +1,6 @@
 package contactSite.programmer;
 
+import contactSite.LoginUtils.SecurityUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -141,5 +142,10 @@ public class Programmer {
 
     public void likeCount(){
         this.likeCount = likeCount+1;
+    }
+
+    public boolean isCorrectPassword(String password) {
+
+        return this.getPassword().equals(SecurityUtils.sha256EncryptHex2(password));
     }
 }
