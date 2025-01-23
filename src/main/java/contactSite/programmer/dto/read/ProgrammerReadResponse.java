@@ -5,6 +5,7 @@ public record ProgrammerReadResponse(
         String name,
         int age,
         String fieldName,
-        Boolean isLiked
+        Boolean isLiked,
+        int likeCount
 ) {
 }
