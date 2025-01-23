@@ -37,8 +37,9 @@ public class ProgrammerRestController {
 
     //상세 조회
     @GetMapping("/programmers/{programmerId}")
-    public ProgrammerDetailResponse findById (@PathVariable String programmerId){
-        return programmerService.findById(programmerId);
+    public ProgrammerDetailResponse findById (@LoginMember String authorization,
+                                              @PathVariable String programmerId){
+        return programmerService.findById(authorization, programmerId);
     }
 
     //상세 조회 - 내 정보
