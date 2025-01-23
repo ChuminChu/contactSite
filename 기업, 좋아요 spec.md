@@ -9,17 +9,17 @@
         - `userId` (String): 회원 아이디
         - `password` (String): 비밀번호
         - 
-        - `name` (String): 이름
-        - `homepage` (String): 홈페이지
-        - `adress` (String): 주소
+        - `companyname` (String): 이름
+        - `website` (String): 홈페이지
+        - `adress` (String): 주소 (지역명까지만)
         - `field` (String): 분야
-        - `businesstype` (String): 업종
-        - `career` (int): 업력
-        - `employees` (int): 사원수 
+        - `businessType` (String): 업종
+        - `established` (int): 설립년도
+        - `employeeCount` (int): 사원수 
         - `Introduction` (String) : 기업 소개
        
 ---
-## 🔍 **간단한 조회**
+## 🔍 **간단한 조회** findAll
 - **Method**: `GET`
 - **Path**: `/companys`
 - **Example Endpoint**: `https://localhost:8080/companys?order=like`
@@ -34,6 +34,7 @@
         - `id` (Number): 아이디 (회원 아이디 X)
         - `name` (String): 이름
         - `field` (Number): 분야
+        - `address` (String): 위치(지역명까지만 넣는걸로)
 
 ---
 
