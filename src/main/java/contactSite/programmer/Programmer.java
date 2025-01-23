@@ -74,7 +74,7 @@ public class Programmer {
         return name;
     }
 
-    public Number getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -82,7 +82,7 @@ public class Programmer {
         return email;
     }
 
-    public Number getPersonalHistory() {
+    public int getPersonalHistory() {
         return personalHistory;
     }
 
@@ -98,7 +98,7 @@ public class Programmer {
         return certificate;
     }
 
-    public Number getLikeCount() {
+    public int getLikeCount() {
         return likeCount;
     }
 
