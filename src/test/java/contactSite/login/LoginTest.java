@@ -74,6 +74,6 @@ public class LoginTest {
                 .extract()
                 .as(AccessToken.class);
 
-        assertThat(token).isNotNull();
+        assertThat(jwtProvider.isValidToken(token.token())).isTrue();
     }
 }
