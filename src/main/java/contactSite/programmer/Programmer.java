@@ -49,7 +49,7 @@ public class Programmer {
 
     public Programmer(String userId, String password, String name, int age, String email, int personalHistory, String fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
-        this.password = password;
+        this.password = SecurityUtils.sha256EncryptHex2(password);
         this.name = name;
         this.age = age;
         this.email = email;
@@ -136,7 +136,7 @@ public class Programmer {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = SecurityUtils.sha256EncryptHex2(password);
     }
 
 
