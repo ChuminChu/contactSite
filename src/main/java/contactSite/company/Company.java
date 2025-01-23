@@ -1,5 +1,6 @@
 package contactSite.company;
 
+import contactSite.LoginUtils.SecurityUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -150,6 +151,14 @@ public class Company {
 
     public void setLikeCount(int likeCount) {
         this.likeCount = likeCount;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public boolean isCorrectPassword(String password) {
+        return this.getPassword().equals(SecurityUtils.sha256EncryptHex2(password));
     }
 
 }
