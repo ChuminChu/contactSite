@@ -29,9 +29,10 @@ public class ProgrammerRestController {
 
     //간단한 조회
     @GetMapping("/programmers")
-    public List<ProgrammerReadResponse> findAll(@RequestParam List<Field> field,
+    public List<ProgrammerReadResponse> findAll(@LoginMember String authorization,
+                                                @RequestParam List<Field> field,
                                                 @RequestParam Integer personalHistory){
-        return programmerService.findAll(field,personalHistory);
+        return programmerService.findAll(authorization,field,personalHistory);
     }
 
     //상세 조회
