@@ -29,11 +29,11 @@ public class Programmer {
     @Column(nullable = false)
     private String name;
 
-    private Number age;
+    private int age;
 
     private String email;
 
-    private Number personalHistory;
+    private int personalHistory;
 
     private String fieldName;
 
@@ -41,10 +41,12 @@ public class Programmer {
 
     private String certificate;
 
+    private int likeCount;
+
     public Programmer() {
     }
 
-    public Programmer(String userId, String password, String name, Number age, String email, Number personalHistory, String fieldName, String selfIntroduction, String certificate) {
+    public Programmer(String userId, String password, String name, int age, String email, int personalHistory, String fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -54,6 +56,10 @@ public class Programmer {
         this.fieldName = fieldName;
         this.selfIntroduction = selfIntroduction;
         this.certificate = certificate;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUserId() {
@@ -68,7 +74,7 @@ public class Programmer {
         return name;
     }
 
-    public Number getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -76,7 +82,7 @@ public class Programmer {
         return email;
     }
 
-    public Number getPersonalHistory() {
+    public int getPersonalHistory() {
         return personalHistory;
     }
 
@@ -90,5 +96,50 @@ public class Programmer {
 
     public String getCertificate() {
         return certificate;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setPersonalHistory(int personalHistory) {
+        this.personalHistory = personalHistory;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public void setSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public void likeCount(){
+        this.likeCount = likeCount+1;
     }
 }
