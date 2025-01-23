@@ -7,6 +7,8 @@ public record ProgrammerDetailResponse(
         Number personalHistory,
         String fieldName,
         String selfIntroduction,
-        String certificate
+        String certificate,
+        Boolean isLiked,
+        int likeCount
 ) {
 }
