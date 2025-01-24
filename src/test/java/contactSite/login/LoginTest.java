@@ -4,6 +4,8 @@ import contactSite.Field;
 import contactSite.Login.LoginRequest;
 import contactSite.LoginUtils.AccessToken;
 import contactSite.LoginUtils.JwtProvider;
+import contactSite.company.CompanyMypageResponse;
+import contactSite.company.CreateCompanyRequest;
 import contactSite.programmer.dto.ProgrammerResponse;
 import contactSite.programmer.dto.create.ProgrammerCreateRequest;
 import contactSite.utils.DatabaseCleanup;
@@ -77,4 +79,45 @@ public class LoginTest {
 
         assertThat(jwtProvider.isValidToken(token.token())).isTrue();
     }
+
+    @Test
+    @DisplayName("기업 로그인 성공 테스트")
+    void companyLoginSuccessTest() {
+
+        CompanyMypageResponse 기업 = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreateCompanyRequest(
+                        "userid",
+                        "1234",
+                        "name",
+                        "업종",
+                        Field.Back_End,
+                        "웹사이트주소",
+                        "지역명",
+                        100,
+                        "기업 소개글",
+                        1995))
+                .when()
+                .post("/companies") // POST
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(CompanyMypageResponse.class);
+
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userid",
+                        "1234"))
+                .when()
+                .post("/login/company")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
+
+    }
+
+
 }
