@@ -1,6 +1,7 @@
 package contactSite.programmer;
 
 import contactSite.Field;
+import contactSite.LoginUtils.SecurityUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +50,7 @@ public class Programmer {
 
     public Programmer(String userId, String password, String name, int age, String email, int personalHistory, Field fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
-        this.password = password;
+        this.password = SecurityUtils.sha256EncryptHex2(password);
         this.name = name;
         this.age = age;
         this.email = email;
@@ -122,10 +123,15 @@ public class Programmer {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = SecurityUtils.sha256EncryptHex2(password);
     }
 
     public void likeCount(){
         this.likeCount = likeCount+1;
+    }
+
+    public boolean isCorrectPassword(String password) {
+
+        return this.getPassword().equals(SecurityUtils.sha256EncryptHex2(password));
     }
 }

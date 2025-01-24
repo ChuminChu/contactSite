@@ -39,9 +39,9 @@ public class LoginMemberResolver implements HandlerMethodArgumentResolver {
             throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
         }
 
-        String userId = jwtProvider.getSubject(token);
+        String id = jwtProvider.getSubject(token);
         // 여기까지 중복코드
 
-        return userId;
+        return id;
     }
 }
