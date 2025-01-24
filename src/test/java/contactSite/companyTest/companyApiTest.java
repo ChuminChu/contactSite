@@ -1,6 +1,8 @@
 package contactSite.companyTest;
 
 import contactSite.Field;
+import contactSite.Login.LoginRequest;
+import contactSite.LoginUtils.AccessToken;
 import contactSite.LoginUtils.JwtProvider;
 import contactSite.company.*;
 import contactSite.utils.DatabaseCleanup;
@@ -49,7 +51,7 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -89,7 +91,7 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -102,7 +104,7 @@ public class companyApiTest {
                 .given().log().all()
                 .pathParam("companyId", 기업.id())
                 .when()
-                .get("/companys/{companyId}") // 서버로 GET /products 요청
+                .get("/companies/{companyId}") // 서버로 GET /products 요청
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -136,22 +138,32 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(CompanyMypageResponse.class);
 
-        assertThat(기업).isNotNull();
+        //로그인
+        AccessToken token = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userid",
+                        "1234"))
+                .when()
+                .post("/login/company") // POST /members 요청
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
-        String token = jwtProvider.createToken(기업.id());
 
         CompanyMypageResponse 내정보조회 = RestAssured
                 .given().log().all()
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .when()
-                .get("/companys/my")
+                .get("/companies/my")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -174,19 +186,29 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(CompanyMypageResponse.class);
 
-
-        String token = jwtProvider.createToken(기업.id());
+        //로그인
+        AccessToken token = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userid",
+                        "1234"))
+                .when()
+                .post("/login/company") // POST /members 요청
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         //수정후
         CompanyMypageResponse 내정보수정 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new CompanyMypageRequest(
                         "userid",
                         "1234",
@@ -199,7 +221,7 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .put("/companys/my") // POST
+                .put("/companies/my") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -216,7 +238,7 @@ public class companyApiTest {
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
                         "userid",
-                        "기존 비밀번호",
+                        "기존비밀번호",
                         "기업이름",
                         "업종",
                         Field.Back_End,
@@ -226,22 +248,32 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(CompanyMypageResponse.class);
 
 
-        String token = jwtProvider.createToken(기업.id());
+        AccessToken token = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userid",
+                        "기존비밀번호"))
+                .when()
+                .post("/login/company") // POST /members 요청
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new CompanyPasswordRequest("수정 후 비밀번호"))
                 .when()
-                .patch("/companys/my") // POST /members 요청
+                .patch("/companies/my") // POST /members 요청
                 .then().log().all()
                 .statusCode(200);
     }
@@ -252,7 +284,7 @@ public class companyApiTest {
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
                         "userid",
-                        "기존 비밀번호",
+                        "1234",
                         "기업이름",
                         "업종",
                         Field.Back_End,
@@ -262,21 +294,31 @@ public class companyApiTest {
                         "기업 소개글",
                         1995))
                 .when()
-                .post("/companys") // POST
+                .post("/companies") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(CompanyMypageResponse.class);
 
 
-        String token = jwtProvider.createToken(기업.id());
+        AccessToken token = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        기업.userId(),
+                        "1234"))
+                .when()
+                .post("/login/company") // POST /members 요청
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         RestAssured
                 .given().log().all()
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .when()
-                .delete("/companys/my")
+                .delete("/companies/my")
                 .then().log().all()
                 .statusCode(200);
 

@@ -49,7 +49,7 @@ public class Company {
 
     public Company(String userId, String password, String companyname, String businessType, Field field, String website, String address, int employeeCount, String introduction, int established) {
         this.userId = userId;
-        this.password = password;
+        this.password = SecurityUtils.sha256EncryptHex2(password);
         this.companyname = companyname;
         this.businessType = businessType;
         this.field = field;
