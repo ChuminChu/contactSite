@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,16 +42,16 @@ public class companyApiTest {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
-                        "name",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -59,37 +61,37 @@ public class companyApiTest {
 
         assertThat(기업).isNotNull();
     }
-
-//    @Test
-//    void 목록조회() {
-//        RestAssured
-//                .given().log().all()
-//                .queryParam("isSale", "true")
-//                .queryParam("minPrice", "50000")
-//                .queryParam("maxPrice", "100000")
-//                .when()
-//                .get("/products") // 서버로 GET /products 요청
-//                .then().log().all()
-//                .statusCode(200); // 요청에 대한 서버 응답의 상태코드가 200인지 검증
 //
-//    }
-
-
+////    @Test
+////    void 목록조회() {
+////        RestAssured
+////                .given().log().all()
+////                .queryParam("isSale", "true")
+////                .queryParam("minPrice", "50000")
+////                .queryParam("maxPrice", "100000")
+////                .when()
+////                .get("/products") // 서버로 GET /products 요청
+////                .then().log().all()
+////                .statusCode(200); // 요청에 대한 서버 응답의 상태코드가 200인지 검증
+////
+////    }
+//
+//
     @Test
     void 상세조회_기업() {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
-                        "name",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -127,16 +129,16 @@ public class companyApiTest {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
-                        "name",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -144,12 +146,13 @@ public class companyApiTest {
                 .extract()
                 .as(CompanyMypageResponse.class);
 
+        assertThat(기업).isNotNull();
         //로그인
         AccessToken token = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userid",
-                        "1234"))
+                        "userid1234",
+                        "abcDEF!123456"))
                 .when()
                 .post("/login/company") // POST /members 요청
                 .then().log().all()
@@ -172,19 +175,20 @@ public class companyApiTest {
 
     @Test
     void 회원정보_수정() {
+
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
+                        "userid1234",
+                        "abcDEF!123456",
                         "수정전이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -192,12 +196,14 @@ public class companyApiTest {
                 .extract()
                 .as(CompanyMypageResponse.class);
 
+        assertThat(기업).isNotNull();
+
         //로그인
         AccessToken token = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userid",
-                        "1234"))
+                        "userid1234",
+                        "abcDEF!123456"))
                 .when()
                 .post("/login/company") // POST /members 요청
                 .then().log().all()
@@ -210,16 +216,15 @@ public class companyApiTest {
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new CompanyMypageRequest(
-                        "userid",
-                        "1234",
+                        "userid1234",
                         "수정후이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .put("/companies/my") // POST
                 .then().log().all()
@@ -237,16 +242,16 @@ public class companyApiTest {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "기존비밀번호",
-                        "기업이름",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -254,12 +259,13 @@ public class companyApiTest {
                 .extract()
                 .as(CompanyMypageResponse.class);
 
-
+        assertThat(기업).isNotNull();
+        //로그인
         AccessToken token = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userid",
-                        "기존비밀번호"))
+                        "userid1234",
+                        "abcDEF!123456"))
                 .when()
                 .post("/login/company") // POST /members 요청
                 .then().log().all()
@@ -267,11 +273,12 @@ public class companyApiTest {
                 .extract()
                 .as(AccessToken.class);
 
+        //수정
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 // TODO: "token" 실제 코드 작성
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
-                .body(new CompanyPasswordRequest("수정 후 비밀번호"))
+                .body(new CompanyPasswordRequest("ABCdef!!1234"))
                 .when()
                 .patch("/companies/my") // POST /members 요청
                 .then().log().all()
@@ -283,16 +290,16 @@ public class companyApiTest {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
-                        "기업이름",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -300,18 +307,21 @@ public class companyApiTest {
                 .extract()
                 .as(CompanyMypageResponse.class);
 
+        assertThat(기업).isNotNull();
 
+        //로그인
         AccessToken token = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        기업.userId(),
-                        "1234"))
+                        "userid1234",
+                        "abcDEF!123456"))
                 .when()
                 .post("/login/company") // POST /members 요청
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(AccessToken.class);
+
 
         RestAssured
                 .given().log().all()

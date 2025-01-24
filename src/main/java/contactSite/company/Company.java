@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.time.LocalDate;
+
 @Entity
 public class Company {
 
@@ -29,17 +31,28 @@ public class Company {
     private String companyname;
 
     //업종, 분야
+    @Column(nullable = false)
     private String businessType;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Field field;
 
     //웹사이트, 주소, 설립년도, 자기소개, 사원수
+    @Column(nullable = false)
     private String website;
+
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
     private int employeeCount;
+
+    @Column(nullable = false)
     private String introduction;
-    private int established;  //설립년도
+
+    @Column(nullable = false)
+    private LocalDate established;  //설립년도
 
     //좋아요 개수
     private int likeCount;
@@ -47,7 +60,7 @@ public class Company {
     protected Company() {
     }
 
-    public Company(String userId, String password, String companyname, String businessType, Field field, String website, String address, int employeeCount, String introduction, int established) {
+    public Company(String userId, String password, String companyname, String businessType, Field field, String website, String address, int employeeCount, String introduction, LocalDate established) {
         this.userId = userId;
         this.password = SecurityUtils.sha256EncryptHex2(password);
         this.companyname = companyname;
@@ -106,7 +119,7 @@ public class Company {
         return introduction;
     }
 
-    public int getEstablished() {
+    public LocalDate getEstablished() {
         return established;
     }
 
@@ -129,7 +142,7 @@ public class Company {
                        String address,
                        int employeeCount,
                        String introduction,
-                       int established) {
+                       LocalDate established) {
         this.companyname = companyname;
         this.businessType = businessType;
         this.field = field;

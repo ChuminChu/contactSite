@@ -47,11 +47,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
+                        "userId1234",
+                        "abcDEF123!",
                         "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -71,11 +71,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
+                        "userId1234",
+                        "abcDEF123!",
                         "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -92,8 +92,8 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
-                        "abc123!"))
+                        "userId1234",
+                        "abcDEF123!"))
                 .when()
                 .post("/login/programmer")
                 .then().log().all()
@@ -128,11 +128,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
+                        "userId1234",
+                        "abcDEF123!",
                         "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -149,8 +149,8 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
-                        "abc123!"))
+                        "userId1234",
+                        "abcDEF123!"))
                 .when()
                 .post("/login/programmer")
                 .then().log().all()
@@ -178,11 +178,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
+                        "userId1234",
+                        "abcDEF123!",
                         수정전이름,
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -199,8 +199,8 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
-                        "abc123!"))
+                        "userId1234",
+                        "abcDEF123!"))
                 .when()
                 .post("/login/programmer")
                 .then().log().all()
@@ -214,10 +214,10 @@ public class programmerTest {
                 // TODO: "token" 실제 코드 작성
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new ProgrammerRequest(
-                        "userId",
+                        "userId1234",
                         수정후이름,
                         24,
-                        "chu@gmail",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안뇽",
@@ -242,11 +242,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
+                        "userId1234",
                         수정전비번,
-                        "추민영",
+                        "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -263,7 +263,7 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
+                        "userId1234",
                         수정전비번))
                 .when()
                 .post("/login/programmer")
@@ -271,7 +271,6 @@ public class programmerTest {
                 .statusCode(200)
                 .extract()
                 .as(AccessToken.class);
-
         RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
@@ -292,11 +291,11 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
-                        "추민영",
+                        "userId1234",
+                        "abcDEF123!",
+                        "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -313,14 +312,15 @@ public class programmerTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
-                        "abc123!"))
+                        "userId1234",
+                        "abcDEF123!"))
                 .when()
                 .post("/login/programmer")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(AccessToken.class);
+
 
         RestAssured
                 .given().log().all()

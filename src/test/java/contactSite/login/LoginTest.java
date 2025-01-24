@@ -19,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("LoginTest")
@@ -48,11 +50,11 @@ public class LoginTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new ProgrammerCreateRequest(
-                        "userId",
-                        "abc123!",
+                        "userId1234",
+                        "abcDEF123!",
                         "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -64,12 +66,13 @@ public class LoginTest {
                 .extract()
                 .as(ProgrammerResponse.class);
 
+        //로그인
         AccessToken token = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userId",
-                        "abc123!"))
+                        "userId1234",
+                        "abcDEF123!"))
                 .when()
                 .post("/login/programmer")
                 .then().log().all()
@@ -87,16 +90,16 @@ public class LoginTest {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
-                        "userid",
-                        "1234",
-                        "name",
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -104,18 +107,22 @@ public class LoginTest {
                 .extract()
                 .as(CompanyMypageResponse.class);
 
-        AccessToken token = RestAssured
-                .given().log().all()
+        assertThat(기업).isNotNull();
+
+        //로그인
+        AccessToken token = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new LoginRequest(
-                        "userid",
-                        "1234"))
+                        "userid1234",
+                        "abcDEF!123456"))
                 .when()
-                .post("/login/company")
+                .post("/login/company") // POST /members 요청
                 .then().log().all()
                 .statusCode(200)
                 .extract()
                 .as(AccessToken.class);
+
+        assertThat(jwtProvider.isValidToken(token.token())).isTrue();
 
     }
 
