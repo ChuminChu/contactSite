@@ -1,16 +1,16 @@
 package contactSite.company;
 
+import contactSite.Field;
+
 public record CompanyDetailResponse(String id,
-                                    String userId,
-                                    String password,
-                                    String companyname,
+                                    String name,
                                     String businesstype,
-                                    String field,
+                                    Field field,
                                     String website,
                                     String address,
-                                    int employeeCount,
+                                    int employeecount,
                                     String introduction,
                                     int established,
-                                    int likeconut
-) {
+                                    int likeCount
+                                    ) {
 }
