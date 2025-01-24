@@ -2,6 +2,8 @@ package contactSite.company;
 
 import contactSite.Field;
 
+import java.time.LocalDate;
+
 public record CompanyDetailResponse(String id,
                                     String name,
                                     String businesstype,
@@ -10,7 +12,7 @@ public record CompanyDetailResponse(String id,
                                     String address,
                                     int employeecount,
                                     String introduction,
-                                    int established,
+                                    LocalDate established,
                                     int likeCount
                                     ) {
 }
