@@ -4,6 +4,7 @@ import contactSite.company.Company;
 import contactSite.programmer.Programmer;
 import jakarta.persistence.*;
 
+@Table(name = "likes")
 @Entity
 public class Like {
 

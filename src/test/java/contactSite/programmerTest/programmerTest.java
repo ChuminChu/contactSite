@@ -1,6 +1,8 @@
 package contactSite.programmerTest;
 
 import contactSite.Field;
+import contactSite.Login.LoginRequest;
+import contactSite.LoginUtils.AccessToken;
 import contactSite.LoginUtils.JwtProvider;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
@@ -85,9 +87,24 @@ public class programmerTest {
                 .extract()
                 .as(ProgrammerResponse.class);
 
+        //로그인
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId",
+                        "abc123!"))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
+
         ProgrammerDetailResponse 개발자상세 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .pathParam("programmerId", 개발자.id())
                 .when()
                 .get("/programmers/{programmerId}")
@@ -128,12 +145,23 @@ public class programmerTest {
                 .as(ProgrammerResponse.class);
 
         //로그인
-        String token = jwtProvider.createToken(개발자.id());
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId",
+                        "abc123!"))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         ProgrammerResponse 개발자상세 = RestAssured
                 .given().log().all()
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .when()
                 .get("/programmers/my")
                 .then().log().all()
@@ -167,13 +195,24 @@ public class programmerTest {
                 .as(ProgrammerResponse.class);
 
         //로그인
-        String token = jwtProvider.createToken(개발자.id());
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId",
+                        "abc123!"))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         ProgrammerResponse 개발자수정 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new ProgrammerRequest(
                         "userId",
                         수정후이름,
@@ -220,13 +259,24 @@ public class programmerTest {
                 .as(ProgrammerResponse.class);
 
         //로그인
-        String token = jwtProvider.createToken(개발자.id());
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId",
+                        수정전비번))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new ProgrammerPasswordRequest(
                         수정후비번
                 ))
@@ -259,13 +309,24 @@ public class programmerTest {
                 .as(ProgrammerResponse.class);
 
         //로그인
-        String token = jwtProvider.createToken(개발자.id());
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId",
+                        "abc123!"))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
 
         RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 // TODO: "token" 실제 코드 작성
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .when()
                 .delete("/programmers/my")
                 .then().log().all()
