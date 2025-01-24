@@ -2,6 +2,8 @@ package contactSite.company;
 
 import contactSite.Field;
 
+import java.time.LocalDate;
+
 public record CompanyMypageResponse(String id,
                                     String userId,
                                     String companyname,
@@ -11,6 +13,6 @@ public record CompanyMypageResponse(String id,
                                     String address,
                                     int employeeCount,
                                     String introduction,
-                                    int established
+                                    LocalDate established
 ) {
 }
