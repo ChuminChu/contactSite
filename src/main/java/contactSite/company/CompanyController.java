@@ -47,14 +47,14 @@ public class CompanyController {
 
     //회원정보 수정
     @PutMapping("/companies/my")
-    public CompanyMypageResponse update(@RequestBody CompanyMypageRequest request,
+    public CompanyMypageResponse update(@Valid @RequestBody CompanyMypageRequest request,
                           @LoginMember String authorization){
         return companyService.update(request,authorization);
     }
 
     //비밀번호 수정
     @PatchMapping("/companies/my")
-    public void password(@RequestBody CompanyPasswordRequest request,
+    public void password(@Valid @RequestBody CompanyPasswordRequest request,
                             @LoginMember String authorization ){
         companyService.updatePassword(request, authorization);
     }
