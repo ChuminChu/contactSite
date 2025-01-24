@@ -40,7 +40,7 @@ public class ProgrammerQueryRepository {
         if (fieldNames == null || fieldNames.isEmpty()) {
            return null;
         }
-        return programmer.fieldName.in(fieldNames.stream().map(f -> f.name()).toList());
+        return programmer.fieldName.in(fieldNames);
     }
 
     // 경력 필터링 메서드
