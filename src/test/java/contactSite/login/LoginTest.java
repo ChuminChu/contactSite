@@ -1,5 +1,6 @@
 package contactSite.login;
 
+import contactSite.Field;
 import contactSite.Login.LoginRequest;
 import contactSite.LoginUtils.AccessToken;
 import contactSite.LoginUtils.JwtProvider;
@@ -51,7 +52,7 @@ public class LoginTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
