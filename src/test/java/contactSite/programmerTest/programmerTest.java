@@ -1,5 +1,6 @@
 package contactSite.programmerTest;
 
+import contactSite.Field;
 import contactSite.LoginUtils.JwtProvider;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
@@ -50,7 +51,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -74,7 +75,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -116,7 +117,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -155,7 +156,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -179,7 +180,7 @@ public class programmerTest {
                         24,
                         "chu@gmail",
                         1,
-                        "벡앤드",
+                        Field.Back_End,
                         "안뇽",
                         "없음"))
                 .when()
@@ -208,7 +209,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -247,7 +248,7 @@ public class programmerTest {
                         24,
                         "email",
                         1,
-                        "백엔드",
+                        Field.Back_End,
                         "안녕하세요",
                         "없음"))
                 .when()
