@@ -1,5 +1,6 @@
 package contactSite.programmer;
 
+import contactSite.Field;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,7 @@ public class Programmer {
 
     private int personalHistory;
 
-    private String fieldName;
+    private Field fieldName;
 
     private String selfIntroduction;
 
@@ -46,7 +47,7 @@ public class Programmer {
     public Programmer() {
     }
 
-    public Programmer(String userId, String password, String name, int age, String email, int personalHistory, String fieldName, String selfIntroduction, String certificate) {
+    public Programmer(String userId, String password, String name, int age, String email, int personalHistory, Field fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -86,7 +87,7 @@ public class Programmer {
         return personalHistory;
     }
 
-    public String getFieldName() {
+    public Field getFieldName() {
         return fieldName;
     }
 
@@ -102,42 +103,27 @@ public class Programmer {
         return likeCount;
     }
 
-    public void setUserId(String userId) {
+    public void update(String userId,
+                       String name,
+                       String email,
+                       int age,
+                       int personalHistory,
+                       Field fieldName,
+                       String selfIntroduction,
+                       String certificate){
         this.userId = userId;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setAge(int age) {
         this.age = age;
-    }
-
-    public void setPersonalHistory(int personalHistory) {
         this.personalHistory = personalHistory;
-    }
-
-    public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
-    }
-
-    public void setSelfIntroduction(String selfIntroduction) {
         this.selfIntroduction = selfIntroduction;
-    }
-
-    public void setCertificate(String certificate) {
         this.certificate = certificate;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public void likeCount(){
         this.likeCount = likeCount+1;

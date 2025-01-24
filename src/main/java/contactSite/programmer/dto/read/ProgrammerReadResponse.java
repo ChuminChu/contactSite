@@ -1,9 +1,11 @@
 package contactSite.programmer.dto.read;
 
+import contactSite.Field;
+
 public record ProgrammerReadResponse(
         String id,
         String name,
         Number age,
-        String fieldName
+        Field fieldName
 ) {
 }

@@ -1,5 +1,7 @@
 package contactSite.programmer.dto;
 
+import contactSite.Field;
+
 public record ProgrammerResponse(
         String id,
         String userId,
@@ -7,7 +9,7 @@ public record ProgrammerResponse(
         int age,
         String email,
         int personalHistory,
-        String fieldName,
+        Field fieldName,
         String selfIntroduction,
         String certificate
 ) {

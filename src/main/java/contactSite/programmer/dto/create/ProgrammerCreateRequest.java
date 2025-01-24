@@ -1,5 +1,7 @@
 package contactSite.programmer.dto.create;
 
+import contactSite.Field;
+
 public record ProgrammerCreateRequest(
         String userId,
         String password,
@@ -7,7 +9,7 @@ public record ProgrammerCreateRequest(
         int age,
         String email,
         int personalHistory,
-        String fieldName,
+        Field fieldName,
         String selfIntroduction,
         String certificate
 ) {
