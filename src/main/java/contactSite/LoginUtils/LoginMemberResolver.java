@@ -10,6 +10,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 public class LoginMemberResolver implements HandlerMethodArgumentResolver {
+    private static final String BEARER_PREFIX = "Bearer ";
+    public static final String INVALID_TOKEN_MESSAGE = "로그인 정보가 유효하지 않습니다";
 
     private final JwtProvider jwtProvider;
 
@@ -24,24 +26,22 @@ public class LoginMemberResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorization = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String bearerToken = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // 여기부터 중복코드
-        String[] tokenFormat = authorization.split(" ");
-        String tokenType = tokenFormat[0];
-        String token = tokenFormat[1];
-
-        if (!tokenType.equals("Bearer")) {
-            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
-        }
-
+        String token = extractToken(bearerToken);
         if (!jwtProvider.isValidToken(token)) {
-            throw new IllegalArgumentException("로그인 정보가 유효하지 않습니다");
+            throw new IllegalArgumentException(INVALID_TOKEN_MESSAGE);
         }
-
         String id = jwtProvider.getSubject(token);
         // 여기까지 중복코드
 
         return id;
+    }
+
+    private String extractToken(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
+            throw new IllegalArgumentException(INVALID_TOKEN_MESSAGE);
+        }
+        return bearerToken.substring(BEARER_PREFIX.length());
     }
 }
