@@ -111,15 +111,14 @@ public class ProgrammerService {
         Programmer programmer = programmerRepository.findById(authorization)
                 .orElseThrow(() -> new NoSuchElementException("로그인 정보가 없습니다."));
 
-        programmer.setUserId(programmerRequest.userId());
-        programmer.setName(programmerRequest.name());
-        programmer.setAge(programmerRequest.age());
-        programmer.setEmail(programmerRequest.email());
-        programmer.setPersonalHistory(programmerRequest.personalHistory());
-        programmer.setFieldName(programmerRequest.fieldName());
-        programmer.setSelfIntroduction(programmerRequest.selfIntroduction());
-        programmer.setCertificate(programmerRequest.certificate());
-
+        programmer.update(programmerRequest.userId(),
+                programmerRequest.name(),
+                programmerRequest.email(),
+                programmerRequest.age(),
+                programmerRequest.personalHistory(),
+                programmerRequest.fieldName(),
+                programmerRequest.selfIntroduction(),
+                programmerRequest.certificate());
 
         return new ProgrammerResponse(
                 programmer.getId(),
