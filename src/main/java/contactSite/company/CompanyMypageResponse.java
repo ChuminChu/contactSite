@@ -2,15 +2,15 @@ package contactSite.company;
 
 import contactSite.Field;
 
-public record CompanyDetailResponse(String id,
-                                    String name,
+public record CompanyMypageResponse(String id,
+                                    String userId,
+                                    String companyname,
                                     String businesstype,
                                     Field field,
                                     String website,
                                     String address,
-                                    int employeecount,
+                                    int employeeCount,
                                     String introduction,
-                                    int established,
-                                    int likeCount
-                                    ) {
+                                    int established
+) {
 }

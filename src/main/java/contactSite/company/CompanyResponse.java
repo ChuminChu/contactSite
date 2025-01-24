@@ -1,9 +1,12 @@
 package contactSite.company;
 
+import contactSite.Field;
+
 public record CompanyResponse(String id,
                               String name,
-                              String field,
-                              String address
+                              Field field,
+                              String address,
+                              int likeCount
 
 ) {
 }

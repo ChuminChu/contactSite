@@ -2,8 +2,8 @@ package contactSite.company;
 
 import contactSite.Field;
 
-public record CreateCompanyRequest(String userId,
-                                   String password,
+public record CompanyMypageRequest(String id,
+                                   String userId,
                                    String companyname,
                                    String businesstype,
                                    Field field,
@@ -11,6 +11,5 @@ public record CreateCompanyRequest(String userId,
                                    String address,
                                    int employeeCount,
                                    String introduction,
-                                   int established
-                                   ) {
+                                   int established) {
 }

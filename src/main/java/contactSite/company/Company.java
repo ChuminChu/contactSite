@@ -1,5 +1,6 @@
 package contactSite.company;
 
+import contactSite.Field;
 import contactSite.LoginUtils.SecurityUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,7 +30,9 @@ public class Company {
 
     //업종, 분야
     private String businessType;
-    private String field;
+
+    @Enumerated(EnumType.STRING)
+    private Field field;
 
     //웹사이트, 주소, 설립년도, 자기소개, 사원수
     private String website;
@@ -44,7 +47,7 @@ public class Company {
     protected Company() {
     }
 
-    public Company(String userId, String password, String companyname, String businessType, String field, String website, String address, int employeeCount, String introduction, int established) {
+    public Company(String userId, String password, String companyname, String businessType, Field field, String website, String address, int employeeCount, String introduction, int established) {
         this.userId = userId;
         this.password = password;
         this.companyname = companyname;
@@ -83,7 +86,7 @@ public class Company {
         return businessType;
     }
 
-    public String getField() {
+    public Field getField() {
         return field;
     }
 
@@ -111,46 +114,30 @@ public class Company {
         return likeCount;
     }
 
-
     //setter - 아이디는 수정 안함
+
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setCompanyname(String companyname) {
+    //회원정보 수정 함수 - 비밀번호 제외
+    public void update(String companyname,
+                       String businessType,
+                       Field field,
+                       String website,
+                       String address,
+                       int employeeCount,
+                       String introduction,
+                       int established) {
         this.companyname = companyname;
-    }
-
-    public void setBusinessType(String businessType) {
         this.businessType = businessType;
-    }
-
-    public void setField(String field) {
         this.field = field;
-    }
-
-    public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setEmployeeCount(int employeeCount) {
         this.employeeCount = employeeCount;
-    }
-
-    public void setIntroduction(String introduction) {
         this.introduction = introduction;
-    }
-
-    public void setEstablished(int established) {
         this.established = established;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
     }
 
     public void increaseLikeCount() {
