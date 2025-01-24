@@ -23,6 +23,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,11 +46,11 @@ public class MessageTest {
         RestAssured.port = port;
     }
 
-    private String programmerId = "programmerId1";
-    private String programmerPassword = "programmerPassword123!";
+    private String programmerId = "userId1234";
+    private String programmerPassword = "abcDEF123!";
 
-    private String companyId = "companyId1";
-    private String companyPassword = "companyPassword123!";
+    private String companyId = "userid1234";
+    private String companyPassword = "abcDEF!123456";
 
     private ProgrammerResponse 개발자_생성(String programmerId, String programmerPassword){
         return RestAssured
@@ -60,7 +61,7 @@ public class MessageTest {
                         programmerPassword,
                         "chu",
                         24,
-                        "email",
+                        "emailtest@gmail.com",
                         1,
                         Field.Back_End,
                         "안녕하세요",
@@ -79,14 +80,14 @@ public class MessageTest {
                 .body(new CreateCompanyRequest(
                         companyId,
                         companyPassword,
-                        "name",
+                        "이름",
                         "업종",
                         Field.Back_End,
-                        "웹사이트주소",
+                        "https://www.kakaocorp.com/page/",
                         "지역명",
                         100,
                         "기업 소개글",
-                        1995))
+                        LocalDate.parse("2024-05-05")))
                 .when()
                 .post("/companies") // POST
                 .then().log().all()
@@ -180,17 +181,18 @@ public class MessageTest {
 
         CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
         CreateCompanyRequest newCompany = new CreateCompanyRequest(
+
                 "companyId2",
                 "companyPassword123!",
                 "기업2",
                 "kakao",
                 Field.Front_End,
-                "www://webseit",
+                "https://www.kakaocorp.com/page/",
                 "주소",
                 12,
 
                 "한줄소개",
-                2002
+                LocalDate.parse("2025-01-24")
         );
         CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
 
@@ -311,12 +313,12 @@ public class MessageTest {
                 "기업2",
                 "kakao",
                 Field.Front_End,
-                "www://webseit",
+                "https://www.kakaocorp.com/page/",
                 "주소",
                 12,
 
                 "한줄소개",
-                2002
+                LocalDate.parse("2025-01-24")
         );
         CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
 
@@ -439,12 +441,12 @@ public class MessageTest {
                 "기업2",
                 "kakao",
                 Field.Front_End,
-                "www://webseit",
+                "https://www.kakaocorp.com/page/",
                 "주소",
                 12,
 
                 "한줄소개",
-                2002
+                LocalDate.parse("2025-01-24")
         );
         CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
 
@@ -567,12 +569,12 @@ public class MessageTest {
                 "기업2",
                 "kakao",
                 Field.Front_End,
-                "www://webseit",
+                "https://www.kakaocorp.com/page/",
                 "주소",
                 12,
 
                 "한줄소개",
-                2002
+                LocalDate.parse("2025-01-24")
         );
         CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
 
