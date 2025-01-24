@@ -1,6 +1,7 @@
 package contactSite.programmer;
 
 import contactSite.Field;
+import contactSite.like.LikeRepository;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
 import contactSite.programmer.dto.ProgrammerResponse;
@@ -10,6 +11,7 @@ import contactSite.programmer.dto.read.ProgrammerReadResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,10 +20,12 @@ public class ProgrammerService {
 
     private final ProgrammerRepository programmerRepository;
     private final ProgrammerQueryRepository programmerQueryRepository;
+    private final LikeRepository likeRepository;
 
-    public ProgrammerService(ProgrammerRepository programmerRepository, ProgrammerQueryRepository programmerQueryRepository) {
+    public ProgrammerService(ProgrammerRepository programmerRepository, ProgrammerQueryRepository programmerQueryRepository, LikeRepository likeRepository) {
         this.programmerRepository = programmerRepository;
         this.programmerQueryRepository = programmerQueryRepository;
+        this.likeRepository = likeRepository;
     }
 
     public ProgrammerResponse create(ProgrammerCreateRequest programmerRequest) {
@@ -49,20 +53,28 @@ public class ProgrammerService {
     }
 
 
-    public List<ProgrammerReadResponse> findAll(List<Field> field, Integer personalHistory) {
-        return programmerQueryRepository.findAll(field, personalHistory)
-                .stream()
-                .map(p-> new ProgrammerReadResponse(
-                        p.getId(),
-                        p.getName(),
-                        p.getAge(),
-                        p.getFieldName()
-                ))
-                .toList();
+    public List<ProgrammerReadResponse> findAll(String authorization, List<Field> field, Integer personalHistory) {
+
+        List<Programmer> programmerList = programmerQueryRepository.findAll(field, personalHistory);
+        List<ProgrammerReadResponse> programmerReadResponses = new ArrayList<>();
+
+        for (Programmer p : programmerList) {
+            programmerReadResponses.add(
+                    new ProgrammerReadResponse(
+                            p.getId(),
+                            p.getName(),
+                            p.getAge(),
+                            p.getFieldName(),
+                            isLiked(authorization, p.getId()),
+                            p.getLikeCount()));
+
+        }
+
+        return programmerReadResponses;
     }
 
 
-    public ProgrammerDetailResponse findById(String programmerId) {
+    public ProgrammerDetailResponse findById(String authorization, String programmerId) {
         Programmer programmer = programmerRepository.findById(programmerId)
                 .orElseThrow(() -> new NoSuchElementException("찾으시는 개발자가 없습니다."));
 
@@ -73,7 +85,9 @@ public class ProgrammerService {
                 programmer.getPersonalHistory(),
                 programmer.getFieldName(),
                 programmer.getSelfIntroduction(),
-                programmer.getCertificate());
+                programmer.getCertificate(),
+                isLiked(authorization, programmerId),
+                programmer.getLikeCount());
     }
 
     public ProgrammerResponse findByMyPage(String authorization) {
@@ -132,5 +146,9 @@ public class ProgrammerService {
                 .orElseThrow(() -> new NoSuchElementException("로그인 정보가 없습니다."));
 
         programmerRepository.deleteById(authorization);
+    }
+
+    private Boolean isLiked(String senderId, String receiverId) {
+        return likeRepository.findBySenderIdAndReceiverId(senderId, receiverId) != null;
     }
 }

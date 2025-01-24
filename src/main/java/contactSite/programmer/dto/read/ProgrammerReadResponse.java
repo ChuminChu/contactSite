@@ -3,7 +3,9 @@ package contactSite.programmer.dto.read;
 public record ProgrammerReadResponse(
         String id,
         String name,
-        Number age,
-        String fieldName
+        int age,
+        String fieldName,
+        Boolean isLiked,
+        int likeCount
 ) {
 }
