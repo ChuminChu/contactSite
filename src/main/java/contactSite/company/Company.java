@@ -121,7 +121,7 @@ public class Company {
         this.password = password;
     }
 
-    //회원정보 수정 함수
+    //회원정보 수정 함수 - 비밀번호 제외
     public void update(String companyname,
                        String businessType,
                        Field field,
