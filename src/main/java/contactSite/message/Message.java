@@ -15,12 +15,16 @@ public class Message {
     @Column(nullable = false)
     private String receiverId;
 
+    private String senderName;
+
     public Message() {
     }
 
-    public Message(String senderId, String receiverId) {
+
+    public Message(String senderId, String receiverId, String senderName) {
         this.senderId = senderId;
         this.receiverId = receiverId;
+        this.senderName = senderName;
     }
 
     public Long getId() {
@@ -33,5 +37,9 @@ public class Message {
 
     public String getReceiverId() {
         return receiverId;
+    }
+
+    public String getSenderName() {
+        return senderName;
     }
 }

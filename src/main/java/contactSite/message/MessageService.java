@@ -27,19 +27,26 @@ public class MessageService {
     }
 
     public MessageResponse create(String senderId, MessageRequest request) {
+        String senderName = "";
         if(request.receiverId().startsWith("C")){
-            companyRepository.findById(request.receiverId())
+            Company company = companyRepository.findById(request.receiverId())
                     .orElseThrow(() -> new NoSuchElementException("해당 기업이 존재하지 않습니다!"));
+            senderName = company.getCompanyname();
         }
         if (request.receiverId().startsWith("P")) {
-            programmerRepository.findById(request.receiverId())
+            Programmer programmer = programmerRepository.findById(request.receiverId())
                     .orElseThrow(() -> new NoSuchElementException("해당 개발자가 존재하지 않습니다!"));
+            senderName = programmer.getName();
         }
+
 
         Message message = messageRepository.save(
                 new Message(
                         senderId,
-                        request.receiverId()));
+                        request.receiverId(),
+                        senderName
+                        ));
+
         return new MessageResponse(
                 message.getId(),
                 message.getReceiverId(),
@@ -49,42 +56,22 @@ public class MessageService {
     //사용자가 보낸거 찾을거야
     public List<MessageSendResponse> findAllSendMessages(String senderId) {
         List<Message> messageList = messageRepository.findAllBySenderId(senderId);
-        List<MessageSendResponse> messageSendResponses = new ArrayList<>();
-
-        for (Message message : messageList) {
-            if(senderId.startsWith("C")){
-                Company company = companyRepository.findById(message.getSenderId())
-                        .orElseThrow(() -> new NoSuchElementException(message.getSenderId() + "님이 보낸 쪽지가 없습니다."));
-                messageSendResponses.add(new MessageSendResponse(message.getId(), company.getCompanyname()));
-            }
-            if(senderId.startsWith("P")){
-                Programmer programmer = programmerRepository.findById(message.getSenderId())
-                        .orElseThrow(() -> new NoSuchElementException(message.getSenderId() + "님이 보낸 쪽지가 없습니다."));
-                messageSendResponses.add(new MessageSendResponse(message.getId(), programmer.getName()));
-            }
-        }
-        return messageSendResponses;
+        return messageAdd(messageList);
     }
-
 
     //내가 받은거
     public List<MessageSendResponse> findAllReceiveMessages(String receiveId) {
         List<Message> messageList = messageRepository.findAllByReceiverId(receiveId);
-        List<MessageSendResponse> messageSendResponses = new ArrayList<>();
+        return messageAdd(messageList);
+    }
 
-        for (Message message : messageList) {
-            if(receiveId.startsWith("C")){
-                Programmer programmer = programmerRepository.findById(message.getSenderId())
-                        .orElseThrow(() -> new NoSuchElementException(message.getSenderId() + "님이 보낸 쪽지가 없습니다."));
-                messageSendResponses.add(new MessageSendResponse(message.getId(), programmer.getName()));
-            }
-            if(receiveId.startsWith("P")){
-                Company company = companyRepository.findById(message.getSenderId())
-                        .orElseThrow(() -> new NoSuchElementException(message.getSenderId() + "님이 보낸 쪽지가 없습니다."));
-                messageSendResponses.add(new MessageSendResponse(message.getId(), company.getCompanyname()));
-            }
-        }
-        return messageSendResponses;
+    private List<MessageSendResponse> messageAdd(List<Message> messageList) {
+        return messageList.stream()
+                .map(message -> new MessageSendResponse(
+                        message.getId(),
+                        message.getSenderName()
+                ))
+                .toList();
     }
 
 
