@@ -52,7 +52,7 @@ public class MessageTest {
     private String companyId = "userid1234";
     private String companyPassword = "abcDEF!123456";
 
-    private ProgrammerResponse 개발자_생성(String programmerId, String programmerPassword){
+    private ProgrammerResponse 개발자(String programmerId, String programmerPassword){
         return RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
@@ -74,13 +74,13 @@ public class MessageTest {
                 .as(ProgrammerResponse.class);
     }
 
-    private CompanyMypageResponse 기업_생성 (String companyId, String companyPassword){
+    private CompanyMypageResponse 기업(String companyId, String companyPassword){
         return RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new CreateCompanyRequest(
                         companyId,
                         companyPassword,
-                        "이름",
+                        "기업이름",
                         "업종",
                         Field.Back_End,
                         "https://www.kakaocorp.com/page/",
@@ -129,17 +129,16 @@ public class MessageTest {
     @Test
     @DisplayName("개발자가 기업에게 쪽지 보내는 테스트")
     void 쪽지생성1() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        CompanyMypageResponse 기업 = 기업_생성(companyId, companyPassword);
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
 
-        AccessToken token = 개발자로그인(programmerId, programmerPassword);
-
-        MessageResponse 개발자가_기업에게_보내는_쪽지 = RestAssured
+        MessageResponse 쪽지 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(기업.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .body(new MessageRequest(기업1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -147,23 +146,24 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        assertThat(개발자가_기업에게_보내는_쪽지).isNotNull();
+        assertThat(쪽지).isNotNull();
+        assertThat(쪽지.senderName()).isEqualTo("기업이름");
     }
 
     @Test
     @DisplayName("기업이 개발자에게 쪽지 보내는 테스트")
     void 쪽지생성2() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
 
-        CompanyMypageResponse 기업 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        AccessToken token = 기업로그인(companyId, companyPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
 
         MessageResponse 쪽지 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(기업.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .body(new MessageRequest(기업1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -177,11 +177,11 @@ public class MessageTest {
     @Test
     @DisplayName("내가 보낸 쪽지(내가 개발자일때)")
     void 내가_보낸_쪽지1() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
+
         CreateCompanyRequest newCompany = new CreateCompanyRequest(
-
                 "companyId2",
                 "companyPassword123!",
                 "기업2",
@@ -194,17 +194,15 @@ public class MessageTest {
                 "한줄소개",
                 LocalDate.parse("2025-01-24")
         );
-        CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
+        CompanyMypageResponse 기업2 = 기업(newCompany.userId(),newCompany.password());
 
-
-        //개발자 로그인
-        AccessToken token = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -216,7 +214,7 @@ public class MessageTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업2.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -227,7 +225,7 @@ public class MessageTest {
         List<MessageSendResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .get("/messages/senders")
                 .then().log().all()
@@ -243,7 +241,7 @@ public class MessageTest {
     @Test
     @DisplayName("내가 보낸 쪽지(내가 기업일때)")
     void 내가_보낸_쪽지2() {
-        ProgrammerResponse 개발자1 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
         ProgrammerCreateRequest newProgrammer = new ProgrammerCreateRequest(
                 "programmerId2",
                 "programmerPassword345!",
@@ -255,17 +253,17 @@ public class MessageTest {
                 "한줄소개",
                 "없음");
 
-        ProgrammerResponse 개발자2 = 개발자_생성(newProgrammer.userId(), newProgrammer.password());
+        ProgrammerResponse 개발자2 = 개발자(newProgrammer.userId(), newProgrammer.password());
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        AccessToken token = 기업로그인(companyId, companyPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(개발자1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -277,7 +275,7 @@ public class MessageTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(개발자2.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -288,7 +286,7 @@ public class MessageTest {
         List<MessageSendResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .get("/messages/senders")
                 .then().log().all()
@@ -303,9 +301,9 @@ public class MessageTest {
     @Test
     @DisplayName("내가 받은 쪽지 조회(내가 개발자일때)")
     void 내가_받은_쪽지1() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
         CreateCompanyRequest newCompany = new CreateCompanyRequest(
                 "companyId2",
@@ -320,17 +318,17 @@ public class MessageTest {
                 "한줄소개",
                 LocalDate.parse("2025-01-24")
         );
-        CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
+        CompanyMypageResponse 기업2 = 기업(newCompany.userId(),newCompany.password());
 
-        AccessToken 개발자토큰 = 개발자로그인(programmerId, programmerPassword);
-        AccessToken 기업1토큰 = 기업로그인(companyId, companyPassword);
-        AccessToken 기업2토큰 = 기업로그인(newCompany.userId(), newCompany.password());
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 기업2_토큰 = 기업로그인(newCompany.userId(), newCompany.password());
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(개발자.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1토큰.token())
+                .body(new MessageRequest(개발자1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -341,8 +339,8 @@ public class MessageTest {
         MessageResponse 쪽지2 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(개발자.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2토큰.token())
+                .body(new MessageRequest(개발자1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -353,7 +351,7 @@ public class MessageTest {
         List<MessageSendResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .get("/messages/receivers")
                 .then().log().all()
@@ -370,7 +368,7 @@ public class MessageTest {
     @Test
     @DisplayName("내가 받은 쪽지 조회 테스트 (내가 기업일때)")
     void 내가_받은_쪽지2() {
-        ProgrammerResponse 개발자1 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
         ProgrammerCreateRequest newProgrammer = new ProgrammerCreateRequest(
                 "programmerId2",
                 "programmerPassword345!",
@@ -382,19 +380,19 @@ public class MessageTest {
                 "한줄소개",
                 "없음");
 
-        ProgrammerResponse 개발자2 = 개발자_생성(newProgrammer.userId(), newProgrammer.password());
+        ProgrammerResponse 개발자2 = 개발자(newProgrammer.userId(), newProgrammer.password());
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        AccessToken 기업토큰 = 기업로그인(companyId, companyPassword);
-        AccessToken 개발자1토큰 = 개발자로그인(programmerId, programmerPassword);
-        AccessToken 개발자2토큰 = 개발자로그인(newProgrammer.userId(), newProgrammer.password());
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 개발자2_토큰 = 개발자로그인(newProgrammer.userId(), newProgrammer.password());
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -406,7 +404,7 @@ public class MessageTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자2토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자2_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -417,7 +415,7 @@ public class MessageTest {
         List<MessageSendResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .get("/messages/receivers")
                 .then().log().all()
@@ -432,9 +430,9 @@ public class MessageTest {
     @Test
     @DisplayName("내가 보낸 쪽지 삭제1(내가 개발자일때)")
     void 보낸_쪽지_삭제1() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
         CreateCompanyRequest newCompany = new CreateCompanyRequest(
                 "companyId2",
                 "companyPassword123!",
@@ -448,17 +446,18 @@ public class MessageTest {
                 "한줄소개",
                 LocalDate.parse("2025-01-24")
         );
-        CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
+        CompanyMypageResponse 기업2 = 기업(newCompany.userId(),newCompany.password());
 
 
         //개발자 로그인
-        AccessToken 개발자토큰 = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -470,7 +469,7 @@ public class MessageTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(기업2.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -478,10 +477,19 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        RestAssured
+                .given().log().all()
+                .pathParam("messageId", 쪽지2.id())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
+                .when()
+                .delete("/messages/senders/{messageId}")
+                .then().log().all()
+                .statusCode(200);
+
+        List<MessageSendResponse> 개발자의쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .get("/messages/senders")
                 .then().log().all()
@@ -490,21 +498,27 @@ public class MessageTest {
                 .jsonPath()
                 .getList(".", MessageSendResponse.class);
 
-        RestAssured
+        List<MessageSendResponse> 기업1의쪽지들 = RestAssured
                 .given().log().all()
-                .pathParam("messageId", 쪽지2.id())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
-                .delete("/messages/senders/{messageId}")
+                .get("/messages/receivers")
                 .then().log().all()
-                .statusCode(200);
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        assertThat(개발자의쪽지들).hasSize(1);
+        assertThat(기업1의쪽지들).hasSize(1);
 
     }
 
     @Test
     @DisplayName("내가 보낸 쪽지 삭제 테스트(내가 기업일때)")
     void 보낸_쪽지_삭제2() {
-        ProgrammerResponse 개발자1 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
         ProgrammerCreateRequest newProgrammer = new ProgrammerCreateRequest(
                 "programmerId2",
                 "programmerPassword345!",
@@ -516,17 +530,18 @@ public class MessageTest {
                 "한줄소개",
                 "없음");
 
-        ProgrammerResponse 개발자2 = 개발자_생성(newProgrammer.userId(), newProgrammer.password());
+        ProgrammerResponse 개발자2 = 개발자(newProgrammer.userId(), newProgrammer.password());
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        AccessToken 기업토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(개발자1.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -538,7 +553,7 @@ public class MessageTest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .body(new MessageRequest(개발자2.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -549,19 +564,47 @@ public class MessageTest {
         RestAssured
                 .given().log().all()
                 .pathParam("messageId", 쪽지2.id())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .delete("/messages/senders/{messageId}")
                 .then().log().all()
                 .statusCode(200);
+
+        List<MessageSendResponse> 기업1의쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
+                .when()
+                .get("/messages/senders")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        List<MessageSendResponse> 개발자의쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
+                .when()
+                .get("/messages/receivers")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        assertThat(기업1의쪽지들).hasSize(1);
+        assertThat(개발자의쪽지들).hasSize(1);
+
     }
 
     @Test
     @DisplayName("내가 받은 쪽지 삭제1(내가 개발자일때)")
     void 받은_쪽지_삭제1() {
-        ProgrammerResponse 개발자 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
         CreateCompanyRequest newCompany = new CreateCompanyRequest(
                 "companyId2",
@@ -576,17 +619,17 @@ public class MessageTest {
                 "한줄소개",
                 LocalDate.parse("2025-01-24")
         );
-        CompanyMypageResponse 기업2 = 기업_생성(newCompany.userId(),newCompany.password());
+        CompanyMypageResponse 기업2 = 기업(newCompany.userId(),newCompany.password());
 
-        AccessToken 개발자토큰 = 개발자로그인(programmerId, programmerPassword);
-        AccessToken 기업1토큰 = 기업로그인(companyId, companyPassword);
-        AccessToken 기업2토큰 = 기업로그인(newCompany.userId(), newCompany.password());
+        AccessToken 개발자1_토큰 = 개발자로그인(programmerId, programmerPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 기업2_토큰 = 기업로그인(newCompany.userId(), newCompany.password());
 
         MessageResponse 쪽지1 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(개발자.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1토큰.token())
+                .body(new MessageRequest(개발자1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -597,8 +640,8 @@ public class MessageTest {
         MessageResponse 쪽지2 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .body(new MessageRequest(개발자.id()))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2토큰.token())
+                .body(new MessageRequest(개발자1.id()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2_토큰.token())
                 .when()
                 .post("/messages")
                 .then().log().all()
@@ -606,10 +649,10 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageSendResponse> 삭제전_개발자1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .get("/messages/receivers")
                 .then().log().all()
@@ -621,17 +664,46 @@ public class MessageTest {
         RestAssured
                 .given().log().all()
                 .pathParam("messageId", 쪽지2.id())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
                 .delete("/messages/receivers/{messageId}")
                 .then().log().all()
                 .statusCode(200);
+
+        List<MessageSendResponse> 삭제후_개발자1쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
+                .when()
+                .get("/messages/receivers")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        List<MessageSendResponse> 기업2쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2_토큰.token())
+                .when()
+                .get("/messages/senders")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        assertThat(삭제전_개발자1쪽지들).hasSize(2);
+        assertThat(삭제후_개발자1쪽지들).hasSize(1);
+        assertThat(기업2쪽지들).hasSize(1);
+
     }
 
     @Test
     @DisplayName("내가 받은 쪽지 삭제2(내가 기업일때)")
     void 받은_쪽지_삭제2() {
-        ProgrammerResponse 개발자1 = 개발자_생성(programmerId, programmerPassword);
+        ProgrammerResponse 개발자1 = 개발자(programmerId, programmerPassword);
         ProgrammerCreateRequest newProgrammer = new ProgrammerCreateRequest(
                 "programmerId2",
                 "programmerPassword345!",
@@ -643,11 +715,11 @@ public class MessageTest {
                 "한줄소개",
                 "없음");
 
-        ProgrammerResponse 개발자2 = 개발자_생성(newProgrammer.userId(), newProgrammer.password());
+        ProgrammerResponse 개발자2 = 개발자(newProgrammer.userId(), newProgrammer.password());
 
-        CompanyMypageResponse 기업1 = 기업_생성(companyId, companyPassword);
+        CompanyMypageResponse 기업1 = 기업(companyId, companyPassword);
 
-        AccessToken 기업토큰 = 기업로그인(companyId, companyPassword);
+        AccessToken 기업1_토큰 = 기업로그인(companyId, companyPassword);
         AccessToken 개발자1토큰 = 개발자로그인(programmerId, programmerPassword);
         AccessToken 개발자2토큰 = 개발자로그인(newProgrammer.userId(), newProgrammer.password());
 
@@ -675,10 +747,10 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageSendResponse> 삭제전_기업1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .get("/messages/receivers")
                 .then().log().all()
@@ -690,11 +762,39 @@ public class MessageTest {
         RestAssured
                 .given().log().all()
                 .pathParam("messageId", 쪽지2.id())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업토큰.token())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
                 .delete("/messages/receivers/{messageId}")
                 .then().log().all()
                 .statusCode(200);
+
+        List<MessageSendResponse> 삭제후_기업1쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
+                .when()
+                .get("/messages/receivers")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        List<MessageSendResponse> 개발자2쪽지들 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자2토큰.token())
+                .when()
+                .get("/messages/senders")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getList(".", MessageSendResponse.class);
+
+        assertThat(삭제전_기업1쪽지들).hasSize(2);
+        assertThat(삭제후_기업1쪽지들).hasSize(1);
+        assertThat(개발자2쪽지들).hasSize(1);
 
     }
 }
