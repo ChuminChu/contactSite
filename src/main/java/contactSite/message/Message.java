@@ -17,6 +17,10 @@ public class Message {
 
     private String senderName;
 
+    private boolean deletedBySender = false;
+
+    private boolean deletedByReceiver = false;
+
     public Message() {
     }
 
@@ -41,5 +45,21 @@ public class Message {
 
     public String getSenderName() {
         return senderName;
+    }
+
+    public boolean isDeletedBySender() {
+        return deletedBySender;
+    }
+
+    public boolean isDeletedByReceiver() {
+        return deletedByReceiver;
+    }
+
+    public void deleteBySender() {
+        this.deletedBySender = true;
+    }
+
+    public void deleteByReceiver() {
+        this.deletedByReceiver = true;
     }
 }

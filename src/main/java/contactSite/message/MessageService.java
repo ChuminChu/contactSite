@@ -8,6 +8,7 @@ import contactSite.message.dto.MessageSendResponse;
 import contactSite.programmer.Programmer;
 import contactSite.programmer.ProgrammerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,23 +51,32 @@ public class MessageService {
         return new MessageResponse(
                 message.getId(),
                 message.getReceiverId(),
-                message.getSenderId());
+                message.getSenderId(),
+                message.getSenderName());
     }
 
     //사용자가 보낸거 찾을거야
     public List<MessageSendResponse> findAllSendMessages(String senderId) {
         List<Message> messageList = messageRepository.findAllBySenderId(senderId);
-        return messageAdd(messageList);
+        return messageAdd(messageList, true);
     }
 
     //내가 받은거
     public List<MessageSendResponse> findAllReceiveMessages(String receiveId) {
         List<Message> messageList = messageRepository.findAllByReceiverId(receiveId);
-        return messageAdd(messageList);
+
+        return messageAdd(messageList, false);
     }
 
-    private List<MessageSendResponse> messageAdd(List<Message> messageList) {
+    private List<MessageSendResponse> messageAdd(List<Message> messageList, boolean isSender) {
         return messageList.stream()
+                .filter(message -> {
+                    if (isSender) {
+                    return !message.isDeletedBySender(); // 받은 사람이 메세지를 삭제하지 않은 걸 보여줘라
+                } else {
+                    return !message.isDeletedByReceiver(); // 받은 메시지는 받은 사람이 삭제하지 않았을 때만 포함
+                }
+                })
                 .map(message -> new MessageSendResponse(
                         message.getId(),
                         message.getSenderName()
@@ -76,23 +86,26 @@ public class MessageService {
 
 
     //내가 보낸 메세지 삭제
+    @Transactional
     public void deleteSendMessage(Long messageId, String senderId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new NoSuchElementException("해당 메세지가 없습니다."));
-
         if (!message.getSenderId().equals(senderId)) throw new IllegalArgumentException("송신 ID가 일치하지 않습니다.");
         else {
-            messageRepository.deleteById(messageId);
+            message.deleteBySender();
+            messageRepository.save(message);
         }
     }
 
+    @Transactional
     public void deleteReceiveMessage(Long messageId, String receiverId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new NoSuchElementException("해당 메세지가 없습니다."));
 
         if (!message.getReceiverId().equals(receiverId)) throw new IllegalArgumentException("송신 ID가 일치하지 않습니다.");
         else {
-            messageRepository.deleteById(messageId);
+            message.deleteByReceiver();
+            messageRepository.save(message);
         }
     }
 }
