@@ -30,10 +30,10 @@ public class MessageRestController {
         return messageService.findAllSendMessages(senderId);
     }
 
-    @DeleteMapping("/messages/senders/{messageId}")
-    public void deleteSendMessage(@PathVariable Long messageId, @LoginMember String senderId) {
+    @DeleteMapping("/messages/{messageId}")
+    public void deleteMessage(@PathVariable Long messageId, @LoginMember String memberId) {
 
-        messageService.deleteSendMessage(messageId, senderId);
+        messageService.deleteMessage(messageId, memberId);
     }
 
     // 사용자가 받은 전체 쪽지 조회
@@ -41,12 +41,6 @@ public class MessageRestController {
     public List<MessageSendResponse> findAllReceiveMessages(@LoginMember String receiveId) {
 
         return messageService.findAllReceiveMessages(receiveId);
-    }
-
-    @DeleteMapping("/messages/receivers/{messageId}")
-    public void deleteReceiveMessage(@PathVariable Long messageId, @LoginMember String receiverId) {
-
-        messageService.deleteReceiveMessage(messageId, receiverId);
     }
 
 }

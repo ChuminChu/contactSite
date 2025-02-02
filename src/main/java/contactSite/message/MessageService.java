@@ -84,28 +84,20 @@ public class MessageService {
                 .toList();
     }
 
-
-    //내가 보낸 메세지 삭제
     @Transactional
-    public void deleteSendMessage(Long messageId, String senderId) {
+    public void deleteMessage(Long messageId, String memberId) {
         Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new NoSuchElementException("해당 메세지가 없습니다."));
-        if (!message.getSenderId().equals(senderId)) throw new IllegalArgumentException("송신 ID가 일치하지 않습니다.");
-        else {
-            message.deleteBySender();
-            messageRepository.save(message);
+                .orElseThrow(() -> new NoSuchElementException("해당 쪽지가 없습니다."));
+
+        // 보낸 사람인지 받은 사람인지 확인
+        if (message.getSenderId().equals(memberId)) {
+            message.deleteBySender();  // 보낸 사람이 삭제한 경우
         }
-    }
-
-    @Transactional
-    public void deleteReceiveMessage(Long messageId, String receiverId) {
-        Message message = messageRepository.findById(messageId)
-                .orElseThrow(() -> new NoSuchElementException("해당 메세지가 없습니다."));
-
-        if (!message.getReceiverId().equals(receiverId)) throw new IllegalArgumentException("송신 ID가 일치하지 않습니다.");
+        if (message.getReceiverId().equals(memberId)) {
+            message.deleteByReceiver();  // 받은 사람이 삭제한 경우
+        }
         else {
-            message.deleteByReceiver();
-            messageRepository.save(message);
+            throw new IllegalArgumentException("이 쪽지는 해당 사용자의 권한이 없습니다.");
         }
     }
 }

@@ -482,7 +482,7 @@ public class MessageTest {
                 .pathParam("messageId", 쪽지2.id())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
-                .delete("/messages/senders/{messageId}")
+                .delete("/messages/{messageId}")
                 .then().log().all()
                 .statusCode(200);
 
@@ -566,7 +566,7 @@ public class MessageTest {
                 .pathParam("messageId", 쪽지2.id())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
-                .delete("/messages/senders/{messageId}")
+                .delete("/messages/{messageId}")
                 .then().log().all()
                 .statusCode(200);
 
@@ -666,7 +666,7 @@ public class MessageTest {
                 .pathParam("messageId", 쪽지2.id())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
                 .when()
-                .delete("/messages/receivers/{messageId}")
+                .delete("/messages/{messageId}")
                 .then().log().all()
                 .statusCode(200);
 
@@ -764,7 +764,7 @@ public class MessageTest {
                 .pathParam("messageId", 쪽지2.id())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
                 .when()
-                .delete("/messages/receivers/{messageId}")
+                .delete("/messages/{messageId}")
                 .then().log().all()
                 .statusCode(200);
 
