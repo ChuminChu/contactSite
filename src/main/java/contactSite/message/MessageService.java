@@ -10,7 +10,6 @@ import contactSite.programmer.ProgrammerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -29,13 +28,13 @@ public class MessageService {
 
     public MessageResponse create(String senderId, MessageRequest request) {
         String senderName = "";
-        if(request.receiverId().startsWith("C")){
-            Company company = companyRepository.findById(request.receiverId())
+        if(request.messageTargetId().startsWith("C")){
+            Company company = companyRepository.findById(request.messageTargetId())
                     .orElseThrow(() -> new NoSuchElementException("해당 기업이 존재하지 않습니다!"));
             senderName = company.getCompanyname();
         }
-        if (request.receiverId().startsWith("P")) {
-            Programmer programmer = programmerRepository.findById(request.receiverId())
+        if (request.messageTargetId().startsWith("P")) {
+            Programmer programmer = programmerRepository.findById(request.messageTargetId())
                     .orElseThrow(() -> new NoSuchElementException("해당 개발자가 존재하지 않습니다!"));
             senderName = programmer.getName();
         }
@@ -44,7 +43,7 @@ public class MessageService {
         Message message = messageRepository.save(
                 new Message(
                         senderId,
-                        request.receiverId(),
+                        request.messageTargetId(),
                         senderName
                         ));
 
