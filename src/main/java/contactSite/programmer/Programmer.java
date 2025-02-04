@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.time.LocalDate;
+
 @Entity
 public class Programmer {
 
@@ -31,6 +33,8 @@ public class Programmer {
     @Column(nullable = false)
     private String name;
 
+    private LocalDate birthDate;
+
     private int age;
 
     private String email;
@@ -48,16 +52,20 @@ public class Programmer {
     public Programmer() {
     }
 
-    public Programmer(String userId, String password, String name, int age, String email, int personalHistory, Field fieldName, String selfIntroduction, String certificate) {
+    public Programmer(String userId, String password, String name, LocalDate birthDate, String email, int personalHistory, Field fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
         this.password = SecurityUtils.sha256EncryptHex2(password);
         this.name = name;
-        this.age = age;
+        this.birthDate = birthDate;
         this.email = email;
         this.personalHistory = personalHistory;
         this.fieldName = fieldName;
         this.selfIntroduction = selfIntroduction;
         this.certificate = certificate;
+    }
+
+    public Programmer(int age) {
+        this.age = age;
     }
 
     public String getId() {
@@ -74,6 +82,10 @@ public class Programmer {
 
     public String getName() {
         return name;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public int getAge() {
@@ -107,7 +119,7 @@ public class Programmer {
     public void update(String userId,
                        String name,
                        String email,
-                       int age,
+                       LocalDate birthDate,
                        int personalHistory,
                        Field fieldName,
                        String selfIntroduction,
@@ -115,7 +127,7 @@ public class Programmer {
         this.userId = userId;
         this.name = name;
         this.email = email;
-        this.age = age;
+        this.birthDate = birthDate;
         this.personalHistory = personalHistory;
         this.fieldName = fieldName;
         this.selfIntroduction = selfIntroduction;
@@ -134,4 +146,23 @@ public class Programmer {
 
         return this.getPassword().equals(SecurityUtils.sha256EncryptHex2(password));
     }
+
+    //만나이로 계산
+public void countAge() {
+        LocalDate currentDate = LocalDate.now();
+
+        int calculatedAge = currentDate.getYear() - birthDate.getYear();
+
+    //월 안지났으면 -1 / 일 안지났으면 -1
+    if (currentDate.getMonthValue() < birthDate.getMonthValue()){
+        calculatedAge --;
+    }
+    if (currentDate.getMonthValue() == birthDate.getMonthValue() && currentDate.getDayOfMonth() < birthDate.getDayOfMonth()){
+        calculatedAge --;
+    }
+
+    this.age = calculatedAge;
+ }
+
 }
+

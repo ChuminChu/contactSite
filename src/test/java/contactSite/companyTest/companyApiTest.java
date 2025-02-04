@@ -61,22 +61,45 @@ public class companyApiTest {
 
         assertThat(기업).isNotNull();
     }
-//
-////    @Test
-////    void 목록조회() {
-////        RestAssured
-////                .given().log().all()
-////                .queryParam("isSale", "true")
-////                .queryParam("minPrice", "50000")
-////                .queryParam("maxPrice", "100000")
-////                .when()
-////                .get("/products") // 서버로 GET /products 요청
-////                .then().log().all()
-////                .statusCode(200); // 요청에 대한 서버 응답의 상태코드가 200인지 검증
-////
-////    }
-//
-//
+
+    @Test
+    void 간단목록조회() {
+        CompanyMypageResponse 기업 = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new CreateCompanyRequest(
+                        "userid1234",
+                        "abcDEF!123456",
+                        "이름",
+                        "업종",
+                        Field.Back_End,
+                        "https://www.kakaocorp.com/page/",
+                        "지역명",
+                        100,
+                        "기업 소개글",
+                        LocalDate.parse("2024-05-05")))
+                .when()
+                .post("/companies") // POST
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(CompanyMypageResponse.class);
+
+        assertThat(기업).isNotNull();
+
+
+        RestAssured
+                .given().log().all()
+                .queryParam("userid", "userid1234")
+                .queryParam("companyname", "이름")
+                .queryParam("field", "Back_End")
+                .queryParam("address", "지역명")
+                .when()
+                .get("/companies")
+                .then().log().all()
+                .statusCode(200); // 요청에 대한 서버 응답의 상태코드가 200인지 검증
+
+    }
+
     @Test
     void 상세조회_기업() {
         CompanyMypageResponse 기업 = RestAssured.given().log().all()
@@ -106,7 +129,7 @@ public class companyApiTest {
                 .given().log().all()
                 .pathParam("companyId", 기업.id())
                 .when()
-                .get("/companies/{companyId}") // 서버로 GET /products 요청
+                .get("/companies/{companyId}")
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -154,7 +177,7 @@ public class companyApiTest {
                         "userid1234",
                         "abcDEF!123456"))
                 .when()
-                .post("/login/company") // POST /members 요청
+                .post("/login/company") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -205,7 +228,7 @@ public class companyApiTest {
                         "userid1234",
                         "abcDEF!123456"))
                 .when()
-                .post("/login/company") // POST /members 요청
+                .post("/login/company") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -267,7 +290,7 @@ public class companyApiTest {
                         "userid1234",
                         "abcDEF!123456"))
                 .when()
-                .post("/login/company") // POST /members 요청
+                .post("/login/company") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()
@@ -280,7 +303,7 @@ public class companyApiTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
                 .body(new CompanyPasswordRequest("ABCdef!!1234"))
                 .when()
-                .patch("/companies/my") // POST /members 요청
+                .patch("/companies/my") // patch
                 .then().log().all()
                 .statusCode(200);
     }
@@ -316,7 +339,7 @@ public class companyApiTest {
                         "userid1234",
                         "abcDEF!123456"))
                 .when()
-                .post("/login/company") // POST /members 요청
+                .post("/login/company") // POST
                 .then().log().all()
                 .statusCode(200)
                 .extract()

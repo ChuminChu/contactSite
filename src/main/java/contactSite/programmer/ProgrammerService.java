@@ -33,18 +33,21 @@ public class ProgrammerService {
                 programmerRequest.userId(),
                 programmerRequest.password(),
                 programmerRequest.name(),
-                programmerRequest.age(),
+                programmerRequest.birthDate(),
                 programmerRequest.email(),
                 programmerRequest.personalHistory(),
                 programmerRequest.fieldName(),
                 programmerRequest.selfIntroduction(),
                 programmerRequest.certificate()));
 
+        programmer.countAge();
+
         return new ProgrammerResponse(
                 programmer.getId(),
                 programmer.getUserId(),
                 programmerRequest.name(),
-                programmerRequest.age(),
+                programmerRequest.birthDate(),
+                programmer.getAge(),
                 programmerRequest.email(),
                 programmerRequest.personalHistory(),
                 programmerRequest.fieldName(),
@@ -98,6 +101,7 @@ public class ProgrammerService {
                 programmer.getId(),
                 programmer.getUserId(),
                 programmer.getName(),
+                programmer.getBirthDate(),
                 programmer.getAge(),
                 programmer.getEmail(),
                 programmer.getPersonalHistory(),
@@ -114,16 +118,19 @@ public class ProgrammerService {
         programmer.update(programmerRequest.userId(),
                 programmerRequest.name(),
                 programmerRequest.email(),
-                programmerRequest.age(),
+                programmerRequest.birthDate(),
                 programmerRequest.personalHistory(),
                 programmerRequest.fieldName(),
                 programmerRequest.selfIntroduction(),
                 programmerRequest.certificate());
 
+        programmer.countAge();
+
         return new ProgrammerResponse(
                 programmer.getId(),
                 programmer.getUserId(),
                 programmer.getName(),
+                programmer.getBirthDate(),
                 programmer.getAge(),
                 programmer.getEmail(),
                 programmer.getPersonalHistory(),
