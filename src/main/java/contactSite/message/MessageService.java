@@ -93,7 +93,7 @@ public class MessageService {
         if (message.getSenderId().equals(memberId)) {
             message.deleteBySender();  // 보낸 사람이 삭제한 경우
         }
-        if (message.getReceiverId().equals(memberId)) {
+        else if (message.getReceiverId().equals(memberId)) {
             message.deleteByReceiver();  // 받은 사람이 삭제한 경우
         }
         else {
