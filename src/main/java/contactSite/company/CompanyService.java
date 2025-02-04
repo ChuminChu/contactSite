@@ -1,6 +1,7 @@
 package contactSite.company;
 
 import contactSite.Field;
+import contactSite.like.LikeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,18 +12,20 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final CompanyQueryRepository companyQueryRepository;
+    private final LikeRepository likeRepository;
 
-    public CompanyService(CompanyRepository companyRepository, CompanyQueryRepository companyQueryRepository
+    public CompanyService(CompanyRepository companyRepository, CompanyQueryRepository companyQueryRepository, LikeRepository likeRepository
     ) {
         this.companyRepository = companyRepository;
         this.companyQueryRepository = companyQueryRepository;
+        this.likeRepository = likeRepository;
     }
 
-    //회원가입 + 비밀번호 해쉬화 추가하기
+    //회원가입 + 비밀번호 해쉬화
     public CompanyMypageResponse create(CreateCompanyRequest request) {
         Company company = companyRepository.save(new Company(
                 request.userId(),
-                request.password(),   //해쉬화 추가
+                request.password(),
                 request.companyname(),
                 request.businesstype(),
                 request.field(),
@@ -143,6 +146,10 @@ public class CompanyService {
                 .orElseThrow(()-> new IllegalArgumentException("회원 정보 찾을 수 없음"));
 
         companyRepository.deleteById(id);
+    }
+
+    private Boolean isLiked(String senderId, String receiverId) {
+        return likeRepository.findBySenderIdAndReceiverId(senderId, receiverId) != null;
     }
 
 }
