@@ -20,7 +20,10 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,7 +53,7 @@ public class programmerTest {
                         "userId1234",
                         "abcDEF123!",
                         "chu",
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -74,7 +77,7 @@ public class programmerTest {
                         "userId1234",
                         "abcDEF123!",
                         "chu",
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -120,6 +123,7 @@ public class programmerTest {
         assertThat(개발자상세.fieldName()).isNotNull();
         assertThat(개발자상세.selfIntroduction()).isNotNull();
         assertThat(개발자상세.certificate()).isNotNull();
+        assertThat(개발자.age()).isEqualTo(24);
     }
 
     @Test
@@ -131,7 +135,7 @@ public class programmerTest {
                         "userId1234",
                         "abcDEF123!",
                         "chu",
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -181,7 +185,7 @@ public class programmerTest {
                         "userId1234",
                         "abcDEF123!",
                         수정전이름,
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -216,7 +220,7 @@ public class programmerTest {
                 .body(new ProgrammerRequest(
                         "userId1234",
                         수정후이름,
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -245,7 +249,7 @@ public class programmerTest {
                         "userId1234",
                         수정전비번,
                         "chu",
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -294,7 +298,7 @@ public class programmerTest {
                         "userId1234",
                         "abcDEF123!",
                         "chu",
-                        24,
+                        LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
                         Field.Back_End,
@@ -332,4 +336,52 @@ public class programmerTest {
                 .then().log().all()
                 .statusCode(200);
     }
+
+
+
+    //만나이 계산
+    public class Person {
+        private LocalDate birthDate;  // 생일
+        private int age;
+
+        public Person(LocalDate birthDate) {
+            this.birthDate = birthDate;
+        }
+
+        public void countAge() {
+
+            LocalDate currentDate = LocalDate.of(2025,02,04);
+
+            int calculatedAge = currentDate.getYear() - birthDate.getYear();
+
+            //월 안지났으면 -1 / 일 안지났으면 -1
+            if (currentDate.getMonthValue() < birthDate.getMonthValue()){
+                calculatedAge --;
+            }
+            if (currentDate.getMonthValue() == birthDate.getMonthValue() && currentDate.getDayOfMonth() < birthDate.getDayOfMonth()){
+                calculatedAge --;
+            }
+
+            age = calculatedAge;
+        }
+
+        public int getAge() {
+            return age;
+        }
+    }
+
+    @Test
+    public void 만나이계산() {
+        // 생일: 1990년 2월 4일
+        Person person = new Person(LocalDate.of(1990, 2, 4));
+
+        // countAge() 메서드 호출
+        person.countAge();
+
+        // 2025년 2월 4일 기준으로 나이는 35세여야 함
+        assertEquals(35, person.getAge());
+    }
+
+
 }
+
