@@ -8,7 +8,6 @@ import contactSite.company.CompanyMypageResponse;
 import contactSite.company.CreateCompanyRequest;
 import contactSite.message.dto.MessageRequest;
 import contactSite.message.dto.MessageResponse;
-import contactSite.message.dto.MessageSendResponse;
 import contactSite.programmer.dto.ProgrammerResponse;
 import contactSite.programmer.dto.create.ProgrammerCreateRequest;
 import contactSite.utils.DatabaseCleanup;
@@ -147,7 +146,7 @@ public class MessageTest {
                 .as(MessageResponse.class);
 
         assertThat(쪽지).isNotNull();
-        assertThat(쪽지.senderName()).isEqualTo("기업이름");
+        assertThat(쪽지.senderOrReceiverName()).isEqualTo("기업이름");
     }
 
     @Test
@@ -222,7 +221,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -232,9 +231,11 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(쪽지들).hasSize(2);
+        assertThat(쪽지들.get(0).senderOrReceiverName()).isEqualTo("기업이름");
+
 
     }
 
@@ -283,7 +284,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -293,9 +294,10 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(쪽지들).hasSize(2);
+        assertThat(쪽지들.get(0).senderOrReceiverName()).isEqualTo("chu");
     }
 
     @Test
@@ -348,7 +350,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -358,7 +360,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(쪽지들).hasSize(2);
 
@@ -412,7 +414,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 쪽지들 = RestAssured
+        List<MessageResponse> 쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -422,7 +424,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(쪽지들).hasSize(2);
     }
@@ -486,7 +488,7 @@ public class MessageTest {
                 .then().log().all()
                 .statusCode(200);
 
-        List<MessageSendResponse> 개발자의쪽지들 = RestAssured
+        List<MessageResponse> 개발자의쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -496,9 +498,9 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
-        List<MessageSendResponse> 기업1의쪽지들 = RestAssured
+        List<MessageResponse> 기업1의쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -508,7 +510,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(개발자의쪽지들).hasSize(1);
         assertThat(기업1의쪽지들).hasSize(1);
@@ -570,7 +572,7 @@ public class MessageTest {
                 .then().log().all()
                 .statusCode(200);
 
-        List<MessageSendResponse> 기업1의쪽지들 = RestAssured
+        List<MessageResponse> 기업1의쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -580,9 +582,9 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
-        List<MessageSendResponse> 개발자의쪽지들 = RestAssured
+        List<MessageResponse> 개발자의쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -592,7 +594,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(기업1의쪽지들).hasSize(1);
         assertThat(개발자의쪽지들).hasSize(1);
@@ -649,7 +651,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 삭제전_개발자1쪽지들 = RestAssured
+        List<MessageResponse> 삭제전_개발자1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -659,7 +661,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         RestAssured
                 .given().log().all()
@@ -670,7 +672,7 @@ public class MessageTest {
                 .then().log().all()
                 .statusCode(200);
 
-        List<MessageSendResponse> 삭제후_개발자1쪽지들 = RestAssured
+        List<MessageResponse> 삭제후_개발자1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자1_토큰.token())
@@ -680,9 +682,9 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
-        List<MessageSendResponse> 기업2쪽지들 = RestAssured
+        List<MessageResponse> 기업2쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업2_토큰.token())
@@ -692,7 +694,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(삭제전_개발자1쪽지들).hasSize(2);
         assertThat(삭제후_개발자1쪽지들).hasSize(1);
@@ -747,7 +749,7 @@ public class MessageTest {
                 .extract()
                 .as(MessageResponse.class);
 
-        List<MessageSendResponse> 삭제전_기업1쪽지들 = RestAssured
+        List<MessageResponse> 삭제전_기업1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -757,7 +759,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         RestAssured
                 .given().log().all()
@@ -768,7 +770,7 @@ public class MessageTest {
                 .then().log().all()
                 .statusCode(200);
 
-        List<MessageSendResponse> 삭제후_기업1쪽지들 = RestAssured
+        List<MessageResponse> 삭제후_기업1쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 기업1_토큰.token())
@@ -778,9 +780,9 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
-        List<MessageSendResponse> 개발자2쪽지들 = RestAssured
+        List<MessageResponse> 개발자2쪽지들 = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + 개발자2토큰.token())
@@ -790,7 +792,7 @@ public class MessageTest {
                 .statusCode(200)
                 .extract()
                 .jsonPath()
-                .getList(".", MessageSendResponse.class);
+                .getList(".", MessageResponse.class);
 
         assertThat(삭제전_기업1쪽지들).hasSize(2);
         assertThat(삭제후_기업1쪽지들).hasSize(1);

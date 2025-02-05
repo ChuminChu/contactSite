@@ -4,7 +4,6 @@ import contactSite.company.Company;
 import contactSite.company.CompanyRepository;
 import contactSite.message.dto.MessageRequest;
 import contactSite.message.dto.MessageResponse;
-import contactSite.message.dto.MessageSendResponse;
 import contactSite.programmer.Programmer;
 import contactSite.programmer.ProgrammerRepository;
 import org.springframework.stereotype.Service;
@@ -27,16 +26,16 @@ public class MessageService {
     }
 
     public MessageResponse create(String senderId, MessageRequest request) {
-        String senderName = "";
+        String receiverName = "";
         if(request.messageTargetId().startsWith("C")){
             Company company = companyRepository.findById(request.messageTargetId())
                     .orElseThrow(() -> new NoSuchElementException("해당 기업이 존재하지 않습니다!"));
-            senderName = company.getCompanyname();
+            receiverName = company.getCompanyname();
         }
         if (request.messageTargetId().startsWith("P")) {
             Programmer programmer = programmerRepository.findById(request.messageTargetId())
                     .orElseThrow(() -> new NoSuchElementException("해당 개발자가 존재하지 않습니다!"));
-            senderName = programmer.getName();
+            receiverName = programmer.getName();
         }
 
 
@@ -44,44 +43,76 @@ public class MessageService {
                 new Message(
                         senderId,
                         request.messageTargetId(),
-                        senderName
+                        receiverName
                         ));
 
         return new MessageResponse(
                 message.getId(),
                 message.getReceiverId(),
                 message.getSenderId(),
-                message.getSenderName());
+                receiverName);
     }
 
-    //사용자가 보낸거 찾을거야
-    public List<MessageSendResponse> findAllSendMessages(String senderId) {
-        List<Message> messageList = messageRepository.findAllBySenderId(senderId);
-        return messageAdd(messageList, true);
-    }
+    //보낸 쪽지함(내가 보낸 메세지)
+    public List<MessageResponse> findAllSendMessages(String senderId) {
+        List<Message> messageList = messageRepository.findAllBySenderId(senderId)
+                .stream()
+                .filter(message -> !message.isDeletedBySender()) // 내가 삭제한 메세지 빼고
+                .toList();
 
-    //내가 받은거
-    public List<MessageSendResponse> findAllReceiveMessages(String receiveId) {
-        List<Message> messageList = messageRepository.findAllByReceiverId(receiveId);
-
-        return messageAdd(messageList, false);
-    }
-
-    private List<MessageSendResponse> messageAdd(List<Message> messageList, boolean isSender) {
         return messageList.stream()
-                .filter(message -> {
-                    if (isSender) {
-                    return !message.isDeletedBySender(); // 받은 사람이 메세지를 삭제하지 않은 걸 보여줘라
-                } else {
-                    return !message.isDeletedByReceiver(); // 받은 메시지는 받은 사람이 삭제하지 않았을 때만 포함
-                }
-                })
-                .map(message -> new MessageSendResponse(
+                .map(message -> new MessageResponse(
                         message.getId(),
-                        message.getSenderName()
+                        message.getReceiverId(),
+                        message.getSenderId(),
+                        getReceiverName(message.getReceiverId()) // 받는 사람 이름 조회
                 ))
                 .toList();
     }
+
+    // 받은 쪽지함 (내가 받은 메시지)
+    public List<MessageResponse> findAllReceiveMessages(String receiverId) {
+        List<Message> messageList = messageRepository.findAllByReceiverId(receiverId)
+                .stream()
+                .filter(message -> !message.isDeletedByReceiver())
+                .toList();
+
+        return messageList.stream()
+                .map(message -> new MessageResponse(
+                        message.getId(),
+                        message.getReceiverId(),
+                        message.getSenderId(),
+                        getSenderName(message.getSenderId()) //보낸 사람 이름 조회
+                ))
+                .toList();
+    }
+
+    // 받는 사람의 이름 가져오기 (보낸 쪽지함에서 사용)
+    private String getReceiverName(String receiverId) {
+        if(receiverId.startsWith("C")){
+            Company company = companyRepository.findById(receiverId).orElseThrow();
+            return company.getCompanyname();
+        } else if (receiverId.startsWith("P")) {
+            Programmer programmer = programmerRepository.findById(receiverId).orElseThrow();
+            return programmer.getName();
+        }
+        throw new IllegalArgumentException("에러 ");
+    }
+
+
+    // 보낸 사람의 이름 가져오기 (받은 쪽지함에서 사용)
+    private String getSenderName(String senderId) {
+        if(senderId.startsWith("C")){
+            Company company = companyRepository.findById(senderId).orElseThrow();
+            return company.getCompanyname();
+        } else if (senderId.startsWith("P")) {
+            Programmer programmer = programmerRepository.findById(senderId).orElseThrow();
+            return programmer.getName();
+        }
+        throw new IllegalArgumentException("에러");
+    }
+
+
 
     @Transactional
     public void deleteMessage(Long messageId, String memberId) {
