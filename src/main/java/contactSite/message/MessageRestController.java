@@ -3,7 +3,6 @@ package contactSite.message;
 import contactSite.LoginUtils.LoginMember;
 import contactSite.message.dto.MessageRequest;
 import contactSite.message.dto.MessageResponse;
-import contactSite.message.dto.MessageSendResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class MessageRestController {
 
     // 사용자가 보낸 전체 쪽지 조회
     @GetMapping("/messages/senders")
-    public List<MessageSendResponse> findAllSendMessages(@LoginMember String senderId) {
+    public List<MessageResponse> findAllSendMessages(@LoginMember String senderId) {
 
         return messageService.findAllSendMessages(senderId);
     }
@@ -38,7 +37,7 @@ public class MessageRestController {
 
     // 사용자가 받은 전체 쪽지 조회
     @GetMapping("/messages/receivers")
-    public List<MessageSendResponse> findAllReceiveMessages(@LoginMember String receiveId) {
+    public List<MessageResponse> findAllReceiveMessages(@LoginMember String receiveId) {
 
         return messageService.findAllReceiveMessages(receiveId);
     }
