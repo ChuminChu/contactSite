@@ -1,0 +1,27 @@
+.mnWrap {
+  background-color: #fc0;
+  height: 400px;
+}
+
+.devCarousel {
+  section {
+
+
+    .swiper {
+      // width: calc(100% - 20px);
+      overflow: hidden;
+
+      .swiper-wrapper {
+        width: 200%;
+        display: flex;
+        justify-content: space-around;
+
+        .swiper-slide {
+          // width: calc(100% / 4 - 20px);
+        }
+      }
+
+
+    }
+  }
+}
