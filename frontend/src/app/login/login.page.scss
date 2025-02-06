@@ -1,0 +1,55 @@
+.login {
+  section {
+    form {
+      width: 80%;
+      margin: 0 auto;
+      max-width: 480px;
+
+      div {
+        margin-top: 20px;
+
+        &:first-of-type {
+          margin-top: 0;
+        }
+
+        &.loginType {
+          label {
+            width: 50%;
+          }
+        }
+      }
+    }
+
+    .signup {
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+      border-top: 1px solid #ccc;
+
+      p {
+        line-height: 40px;
+      }
+
+      .signupBtns {
+        span {
+          padding: 0 20px;
+        }
+
+        a {
+          font-weight: 700;
+          font-size: 18px;
+          line-height: 40px;
+          padding: 0 10px;
+
+          &.dev {
+            color: #f90;
+          }
+
+          &.com {
+            color: #09f;
+          }
+        }
+      }
+    }
+  }
+}

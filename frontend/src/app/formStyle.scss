@@ -1,0 +1,64 @@
+form {
+  box-sizing: border-box;
+
+  label {
+    line-height: 40px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 10px;
+
+    svg {
+      font-size: 30px;
+    }
+  }
+
+  input {
+    box-sizing: border-box;
+    line-height: 40px;
+    font-size: 16px;
+    height: 40px;
+  }
+
+  input[type=text],
+  input[type=password],
+  input[type=email],
+  input[type=url] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  input[type=radio] {
+    display: none;
+
+    &:not(:checked)~* {
+      color: #CCC;
+    }
+
+    &:checked~* {
+      color: #06f;
+    }
+
+    &:not(:checked)~svg:nth-of-type(1) {
+      display: none;
+    }
+
+    &:checked~svg:nth-of-type(2) {
+      display: none;
+    }
+  }
+
+  textarea {}
+
+  button {
+    width: 100%;
+    font-size: 16px;
+    line-height: 40px;
+    background-color: #09f;
+    color: #FFF;
+    font-weight: 700;
+    border-radius: 5px;
+  }
+}
