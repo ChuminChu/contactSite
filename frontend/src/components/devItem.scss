@@ -1,0 +1,75 @@
+.devItem {
+  // width: calc(100% / 8 - 20px);
+  width: 100%;
+  padding: 16px;
+  background-color: #efefef;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+
+  .imgBox {
+    background-color: #999;
+    height: 200px;
+    border-radius: 5px;
+  }
+
+  .txtBox {
+    margin-top: 10px;
+
+    .posTap {
+      display: flex;
+
+      li {
+        font-size: 12px;
+        line-height: 22px;
+        height: 20px;
+        background-color: #666;
+        color: #fff;
+        padding: 0 10px;
+        border-radius: 20px;
+      }
+    }
+
+    .devNameGroup {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+
+      .devName {
+        font-size: 20px;
+        line-height: 40px;
+        font-weight: 700;
+      }
+
+      .rating {
+        line-height: 40px;
+        cursor: pointer;
+      }
+    }
+
+    .moreBtn {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+
+      button {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        background-color: #999;
+        padding: 4px 6px 0px 12px;
+        border-radius: 20px;
+
+        label {
+          font-size: 16px;
+        }
+
+        span {
+          font-size: 24px;
+          margin-left: 6px;
+        }
+      }
+
+
+    }
+  }
+}
