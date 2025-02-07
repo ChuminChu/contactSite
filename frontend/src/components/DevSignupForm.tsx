@@ -55,7 +55,7 @@ export function DevSignupForm() {
     if (response.ok) {
       router.push(`/`);
     } else {
-      alert("Failed to create post");
+      alert("Failed to create Developer Account");
     }
   };
 
