@@ -1,0 +1,70 @@
+.formContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+}
+
+.form {
+        width: 35%;
+        padding: 20px;
+        border-radius: 10px;
+        justify-content: center;
+}
+
+.formGroup {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+}
+.formTitle{
+        width: 20%;
+}
+
+
+.input{
+        background: #EEEEEE;
+        border-color:  #999999;
+        border-radius: 1px;
+        width: 50% !important;
+}
+.textarea {
+        width: 70%;
+        padding: 8px;
+        background: #EEEEEE;
+        border: 1px solid #999999;
+        border-radius: 5px;
+        font-size: 14px; /* 글자 크기 줄이기 */
+}
+
+.textarea {
+        height: 100px; /* 텍스트 입력 칸 크기 조정 */
+}
+
+.buttonGroup {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+}
+
+.submitButton,
+.cancelButton {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+}
+
+.submitButton {
+        background-color: #5588FF;
+        color: white;
+}
+
+.cancelButton {
+        background-color: #999999;
+        color: white;
+}
+
+
