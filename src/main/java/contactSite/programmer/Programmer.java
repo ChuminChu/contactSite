@@ -2,14 +2,12 @@ package contactSite.programmer;
 
 import contactSite.Field;
 import contactSite.LoginUtils.SecurityUtils;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Programmer {
@@ -41,7 +39,9 @@ public class Programmer {
 
     private int personalHistory;
 
-    private Field fieldName;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<Field> fieldName;
 
     private String selfIntroduction;
 
@@ -52,7 +52,7 @@ public class Programmer {
     public Programmer() {
     }
 
-    public Programmer(String userId, String password, String name, LocalDate birthDate, String email, int personalHistory, Field fieldName, String selfIntroduction, String certificate) {
+    public Programmer(String userId, String password, String name, LocalDate birthDate, String email, int personalHistory, List<Field> fieldName, String selfIntroduction, String certificate) {
         this.userId = userId;
         this.password = SecurityUtils.sha256EncryptHex2(password);
         this.name = name;
@@ -100,7 +100,7 @@ public class Programmer {
         return personalHistory;
     }
 
-    public Field getFieldName() {
+    public List<Field> getFieldName() {
         return fieldName;
     }
 
@@ -121,7 +121,7 @@ public class Programmer {
                        String email,
                        LocalDate birthDate,
                        int personalHistory,
-                       Field fieldName,
+                       List<Field> fieldName,
                        String selfIntroduction,
                        String certificate){
         this.userId = userId;

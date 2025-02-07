@@ -3,6 +3,7 @@ package contactSite.programmer.dto;
 import contactSite.Field;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProgrammerResponse(
         String id,
@@ -12,7 +13,7 @@ public record ProgrammerResponse(
         int age,
         String email,
         int personalHistory,
-        Field fieldName,
+        List<Field> fieldName,
         String selfIntroduction,
         String certificate
 ) {
