@@ -4,6 +4,7 @@ import contactSite.Field;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProgrammerRequest(
         @NotBlank @Size(min = 6, max = 20)
@@ -14,7 +15,7 @@ public record ProgrammerRequest(
         @Past(message = "YYYY-MM-DD") LocalDate birthDate,  //생년월일 넣으면 나이로 변환
         @Email String email,
         @Max(100) int personalHistory,
-        Field fieldName,
+        List<Field> fieldName,
         @Size(max = 10000) String selfIntroduction,
         @Size(max = 10000) String certificate
 ) {

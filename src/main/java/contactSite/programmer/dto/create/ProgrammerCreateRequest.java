@@ -4,6 +4,7 @@ import contactSite.Field;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ProgrammerCreateRequest(
         @NotBlank @Size(min = 6, max = 20)
@@ -18,7 +19,7 @@ public record ProgrammerCreateRequest(
         @Past(message = "YYYY-MM-DD") LocalDate birthDate,
         @Email String email,
         @Max(100) int personalHistory,
-        Field fieldName,
+        List<Field> fieldName,
         @Size(max = 10000) String selfIntroduction,
         @Size(max = 10000) String certificate
 
