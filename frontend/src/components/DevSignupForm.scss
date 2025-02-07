@@ -1,0 +1,219 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+
+    label {
+        line-height: 40px;
+        font-size: 16px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0 10px;
+    }
+
+    input {
+        box-sizing: border-box;
+        line-height: 40px;
+        font-size: 16px;
+        height: 40px;
+    }
+
+    input[type=text] {
+        width: 50%;
+    }
+
+    input[type=password] {
+        width: 50%;
+    }
+
+    input[type=email] {
+        width: 60%;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=radio] {
+        display: none;
+
+        &:not(:checked) ~ * {
+            color: #CCC;
+        }
+
+        &:checked ~ * {
+            color: #06f;
+        }
+
+        &:not(:checked) ~ svg:nth-of-type(1) {
+            display: none;
+        }
+
+        &:checked ~ svg:nth-of-type(2) {
+            display: none;
+        }
+    }
+
+    button {
+        width: 100%;
+        font-size: 16px;
+        line-height: 40px;
+        background-color: #09f;
+        color: #FFF;
+        font-weight: 700;
+        border-radius: 5px;
+    }
+
+    .formLayout {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px;
+    }
+
+    .formRow {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* label과 input 사이 여백 */
+    }
+
+    .field {
+        display: grid;
+        gap: 10px;
+        align-items: center;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-items: center;
+    }
+
+    .birth {
+        display: grid;
+        //gap: 5px;
+        align-items: center;
+        grid-template-columns: 1fr 1fr 1fr;
+        justify-items: left;
+
+        .year, .month, .day {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            gap: 5px;
+        }
+
+        /* 생년월일 입력 폼 스타일 */
+        .inputBirth {
+            width: 100%;
+            max-width: 250px; /* 최대 너비 설정 */
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: text;
+        }
+    }
+
+    .personalHistory {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        gap: 5px;
+
+        .inputPersonalHistory {
+            width: 15%;
+            max-width: 250px; /* 최대 너비 설정 */
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: text;
+            text-align: right;
+        }
+    }
+
+    .label {
+        font-size: 14px;
+        font-weight: bold;
+        width: 100px; /* label의 고정 너비 */
+        text-align: right; /* 텍스트 오른쪽 정렬 */
+    }
+
+    .input, .inputId, .textareaSelf, .textareaCert {
+        flex: 1; /* 남은 공간을 모두 차지 */
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .textareaSelf {
+        min-height: 100px;
+        max-height: 100px;
+        resize: vertical;
+    }
+
+    .textareaCert {
+        min-height: 50px;
+        max-height: 50px;
+        resize: vertical;
+    }
+
+    .submitButton {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #09f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .submitButton:hover {
+        background-color: #0077cc;
+    }
+
+    /* 아이디 입력폼 스타일 */
+    .inputId {
+        width: 50%;
+    }
+
+    /* 호버 & 포커스 효과 */
+    .inputBirth:hover {
+        border-color: #007bff;
+    }
+
+    .inputBirth:focus {
+        border-color: #0056b3;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+    }
+
+    /* 체크박스 스타일 */
+    .checkboxContainer {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 100%;
+    }
+
+    .checkboxContainer input {
+        width: 20px;
+        margin-right: 10px;
+        align-content: end;
+        cursor: pointer;
+    }
+
+    .checkboxLabel {
+        font-size: 12px;
+        padding: 0 5px;
+        text-align: left;
+        cursor: default;
+    }
+}
