@@ -1,11 +1,10 @@
 "use client"
 
 import "./company.page.scss";
-import {useEffect, useState} from "react";
-import Link from "next/link";
 import styles from "./page.module.css";
+import {useState} from "react";
 
-// const API_URL = "https://localhost:3000/companies"
+const API_URL = "https://localhost:3000/companies"
 
 interface Company {
     id: number;
@@ -18,19 +17,31 @@ interface Company {
 
 function CompanyPage(company: Company) {
     return (
-        <tr key={company.id}>
+        <tr>
             <td>{company.name}</td>
             <td>{company.field}</td>
             <td>{company.employeeCount}</td>
             <td>{company.address}</td>
             <td>{company.likeCount}</td>
-
         </tr>
 
     )
 }
 
+
 export default function CompanyListPage() {
+
+    const [selectedOption, setSelectedOption] = useState(false);
+    const [selectedOption2, setSelectedOption2] = useState(false);
+
+
+    function 클릭시실행함수() {
+        setSelectedOption(!selectedOption);
+    }
+
+    function 클릭시실행함수2() {
+        setSelectedOption2(!selectedOption2);
+    }
 
     const companies: Company[] = [
         {
@@ -188,40 +199,26 @@ export default function CompanyListPage() {
         }
     ];
 
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const itemsPerPage = 17;  //한페이지당 기업 목록 수
-    //
-    // const paginatedCompanies = companies.slice(
-    //     (currentPage - 1) * itemsPerPage,       //시작 인덱스 인덱스[]이기 때문에 -1
-    //     currentPage * itemsPerPage      //끝 인덱스는 자체가 범위에서 제외됨
-    // );
-    //
-    // //페이지 이동
-    // const handleNextPage = () => {
-    //     if ( currentPage * itemsPerPage < companies.length ) {
-    //         setCurrentPage(currentPage + 1);
-    //     }
-    // }
-
-    // const [companies, setCompanies] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
-    //
-    // //useEffect 자동으로 받기
-    // useEffect(() => {
-    //  try {
-    //      const response = await fetch("https://localhost:3000/companies");
-    //  }
-    // },[])
-
 
     return (
         <>
             <div className="search search-dev">
-                <header className={styles.searchbox}>
-                    검색창
-                </header>
-                <section>검색옵션</section>
+                <header className={styles.searchbox}>검색창</header>
+                <section className={styles.option}>
+                    <span>검색옵션</span>
+
+                    <div className={styles.optionContainer}>
+                        <button
+                            className={`${styles.button} ${selectedOption ? styles.selected : ''}`}
+                            onClick={클릭시실행함수}>
+                            {selectedOption ? "구인분야 x" : "구인분야"}
+                        </button>
+                        <button className={`${styles.button} ${selectedOption2 ? styles.selected : ''}`}
+                                onClick={클릭시실행함수2}>
+                            {selectedOption2 ? "지역x" : "지역"}
+                        </button>
+                    </div>
+                </section>
             </div>
             <div className="container comlist">
                 <header>
@@ -243,6 +240,7 @@ export default function CompanyListPage() {
                         <tbody>
                         {companies.map(company =>
                             <CompanyPage
+                                key={company.id}
                                 id={company.id}
                                 name={company.name}
                                 field={company.field}
@@ -251,15 +249,11 @@ export default function CompanyListPage() {
                                 likeCount={company.likeCount}/>)}
                         </tbody>
 
-                        <thead>
-                        <tr>
-                            <th>이전</th>
-                            <th>다음</th>
-                        </tr>
-                        </thead>
-
-
                     </table>
+                    <div className={styles.pagination}>
+                        <button className={styles.button}>이전</button>
+                        <button className={styles.button}>다음</button>
+                    </div>
 
                 </section>
             </div>
