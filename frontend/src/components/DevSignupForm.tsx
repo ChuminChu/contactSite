@@ -53,7 +53,7 @@ export function DevSignupForm() {
     // })
 
     if (response.ok) {
-      router.push(`/`);
+      router.push(`/login`);
     } else {
       alert("Failed to create Developer Account");
     }
