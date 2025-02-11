@@ -1,12 +1,15 @@
-"use client";
+//"use client";
 
-import React, { useState } from "react";
+//import React, { useState } from "react";
 import Link from "next/link";
-import { FaSignInAlt,FaUser,FaComment ,FaBuilding} from "react-icons/fa";
+import { FaSignInAlt, FaUser, FaComment, FaBuilding } from "react-icons/fa";
+import { getUserType, setUserType } from "@/app/userTypeUtils";
 
-export default function Header() {
-  const [authState, setAuthState] = useState<"notLoggedIn" | "developer" | "businessmen">("notLoggedIn");
+export default async function Header() {
+  await setUserType(); // 서버에서 userType 설정
+  const userType = getUserType(); // 전역 userType 가져오기
 
+  //const authState: string = "notLoggedIn";
   return (
     <div className="hdrWrap">
       <header>
@@ -22,26 +25,26 @@ export default function Header() {
           </li>
         </ul>
         <div className="utilBox">
-          {authState === "notLoggedIn" && (
-              <>
-                <Link href={"/login"}>
-                  <FaSignInAlt />
-                </Link>
-              </>
+          {userType === "notLoggedIn" && (
+            <>
+              <Link href={"/login"}>
+                <FaSignInAlt />
+              </Link>
+            </>
           )}
-
-          {authState === "developer" && (
-              <>
-                <Link href={""}><FaComment /></Link>
-                <Link href={"/editDeveloper"}><FaUser /></Link>
-              </>
-          )}
-
-          {authState === "businessmen" && (
-              <>
-                <Link href={""}><FaComment /></Link>
-                <Link href={"/editCompany"}><FaBuilding /></Link>
-              </>
+          {(userType === "developer" || userType === "businessmen") && (
+            <>
+              <Link href={""}>
+                <FaComment />
+              </Link>
+              <Link href={""}>
+                {userType === "developer" ? (
+                  <FaUser />
+                ) : userType === "businessmen" ? (
+                  <FaBuilding />
+                ) : null}
+              </Link>
+            </>
           )}
         </div>
       </header>
