@@ -20,6 +20,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,7 +57,7 @@ public class LoginTest {
                         LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
-                        Field.Back_End,
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
