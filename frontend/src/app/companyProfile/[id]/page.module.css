@@ -1,0 +1,75 @@
+/*.container {*/
+/*    display: flex;*/
+/*    justify-content: center; !* 수평 중앙 정렬 *!*/
+/*    align-items: center; !* 수직 중앙 정렬 *!*/
+/*    min-height: 100vh; !* 화면의 최소 높이를 100vh로 설정하여 중앙에 배치 *!*/
+/*    flex-direction: column;*/
+/*}*/
+
+.table{
+    width: 60%; /* 테이블 너비 설정 (필요에 따라 조절) */
+    margin: 0 auto; /* 테이블을 수평 중앙 정렬 */
+    border-collapse: separate;
+    border-spacing: 0 50px; /* 세로 간격 10px 추가 (행 간격) */
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 10px;*/
+    table-layout: fixed; /* 테이블 셀 크기 고정 */
+    word-wrap: break-word; /* 긴 텍스트 줄바꿈 */
+}
+
+.table td.title{
+    width: 100px; /* 셀의 너비를 고정 */
+    height: 30px;
+    font-weight: bold;
+    padding: 15px;
+    padding-right: 0;
+    border-left: 8px solid #ddd;
+}
+
+.table td.content{
+    width: 300px;
+    padding-left: 10px;
+}
+
+
+.table tr{
+    padding: 15px;
+    margin-top: 10px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.table td{
+    padding: 20px;
+}
+
+.option{
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    padding: 50px;
+    /*margin-right: 400px;*/
+}
+
+.option button{
+    border: none;
+    background-color: #a0a0a0;
+    padding: 8px 50px;
+    flex: 1; /* 버튼의 너비를 동일하게 설정 */
+    max-width: 200px; /* 버튼의 최대 너비를 설정하여 너무 커지지 않도록 */
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.option button.selected{
+    background-color: #ff3700;
+    color: white;
+}
+.option button.selected2{
+    background-color: #1BA8CB;
+    color: white;
+}
