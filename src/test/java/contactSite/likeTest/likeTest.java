@@ -68,7 +68,7 @@ public class likeTest {
                         LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
-                        Field.Back_End,
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -88,7 +88,7 @@ public class likeTest {
                         LocalDate.parse("2002-02-02"),
                         "emailtest2@gmail.com",
                         1,
-                        Field.Back_End,
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -139,7 +139,7 @@ public class likeTest {
                         LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
-                        Field.Back_End,
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -159,7 +159,7 @@ public class likeTest {
                         LocalDate.parse("2002-02-02"),
                         "emailtest2@gmail.com",
                         1,
-                        Field.Back_End,
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
