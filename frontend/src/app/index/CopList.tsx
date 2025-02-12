@@ -1,20 +1,24 @@
-export default function CopList() {
-  return (
-    <div className="container">
-      <header>
-        <h3>기업 리스트</h3>
-        <p></p>
-      </header>
-      <section>
-        <ul className="cop-th">
-          <li>연번</li>
-          <li>기업명</li>
-          <li>구인분야</li>
-          <li>직원수</li>
-          <li>기업소재지</li>
-          <li>좋아요</li>
-        </ul>
-      </section>
-    </div>
-  );
+import {CompanyList} from "@/components/companyList";
+
+interface Company {
+    id: string;
+    name: string;
+    field: string;
+    employeeCount: number;
+    address: string;
+    likeCount: number;
+}
+
+export default async function CopList() {
+    const response = await fetch('http://localhost:8080/companies?');
+    const companies = await response.json()
+    return (
+        <div className="container">
+            <header>
+                <h3>기업 리스트</h3>
+                <p></p>
+            </header>
+            <CompanyList companies={companies}/>
+        </div>
+    );
 }
