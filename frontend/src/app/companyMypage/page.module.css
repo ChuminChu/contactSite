@@ -1,0 +1,38 @@
+.table{
+    width: 60%; /* 테이블 너비 설정 (필요에 따라 조절) */
+    margin: 0 auto; /* 테이블을 수평 중앙 정렬 */
+    border-collapse: separate;
+    border-spacing: 0 50px; /* 세로 간격 10px 추가 (행 간격) */
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 10px;*/
+    table-layout: fixed; /* 테이블 셀 크기 고정 */
+    word-wrap: break-word; /* 긴 텍스트 줄바꿈 */
+}
+
+.table td.title{
+    width: 100px; /* 셀의 너비를 고정 */
+    height: 30px;
+    font-weight: bold;
+    padding: 15px;
+    padding-right: 0;
+    border-left: 8px solid #ddd;
+}
+
+.table td.content{
+    width: 300px;
+    padding-left: 10px;
+}
+
+
+.table tr{
+    padding: 15px;
+    margin-top: 10px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.table td{
+    padding: 20px;
+}
