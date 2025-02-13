@@ -27,8 +27,6 @@ public class LikeService {
     @Transactional
     public void create(String senderId, LikeRequest request) {
 
-        Like like = new Like(senderId, request.receiverId());
-        likeRepository.save(like);
         // 기업이 기업에게 좋아요를 누를 경우 에러 발생
         if (isCompanyToCompany(senderId, request.receiverId())) {
             throw new IllegalArgumentException("기업이 기업에 좋아요를 누를 수 없습니다.");
@@ -42,6 +40,8 @@ public class LikeService {
                     () -> new NoSuchElementException("해당 ID의 개발자가 존재하지 않습니다!"));
             programmer.likeCount();
         }
+        Like like = new Like(senderId, request.receiverId());
+        likeRepository.save(like);
     }
 
     public List<LikeResponse> findAllLikes(String senderId) {
