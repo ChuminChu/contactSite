@@ -80,12 +80,82 @@
         gap: 10px; /* label과 input 사이 여백 */
     }
 
+    .require {
+        height: 20%;
+        width: 20%;
+        color: red;
+    }
+
     .field {
         display: grid;
-        gap: 10px;
+        //gap: 10px;
         align-items: center;
         grid-template-columns: 1fr 1fr 1fr;
         justify-items: center;
+    }
+
+    .userId {
+        display: flow;
+        gap: 10px;
+        align-items: center;
+        justify-items: left;
+
+        input {
+            margin: 0 5px 0 0;
+            width: 50%;
+        }
+        button {
+            font-size: 12px;
+            font-weight: unset;
+            line-height: 20px;
+            width: 20%;
+            background-color: #28a745; // ✅ 확인, 검증 느낌의 녹색
+            color: white;
+            border: none;
+            border-radius: 5px; // 부드러운 디자인
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+
+            &:hover {
+                background-color: #218838; // 더 짙은 녹색 (호버 효과)
+                transform: scale(1.05); // 살짝 확대 (클릭 유도)
+            }
+
+            &:active {
+                background-color: #1e7e34; // 눌렸을 때 더 진한 녹색
+                transform: scale(0.98); // 클릭 시 눌리는 효과
+            }
+
+            &:disabled {
+                background-color: #b5b5b5; // 비활성화 시 회색
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .checkPassword {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        align-items: center;
+        justify-items: left;
+
+        .success-message {
+            color: #28a745; // 초록색
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            color: #dc3545; // 빨간색
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    }
+
+    select {
+        appearance: none;
+        cursor: pointer;
     }
 
     .birth {
@@ -112,7 +182,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #fff;
-            cursor: text;
+            //cursor: text;
         }
     }
 
@@ -138,7 +208,7 @@
     .label {
         font-size: 14px;
         font-weight: bold;
-        width: 100px; /* label의 고정 너비 */
+        //width: 100px; /* label의 고정 너비 */
         text-align: right; /* 텍스트 오른쪽 정렬 */
     }
 
@@ -173,6 +243,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background 0.3s ease;
+        width: 5rem;
     }
 
     .submitButton:hover {
@@ -199,13 +270,11 @@
     .checkboxContainer {
         display: flex;
         align-items: center;
-        justify-content: end;
         width: 100%;
     }
 
     .checkboxContainer input {
         width: 20px;
-        margin-right: 10px;
         align-content: end;
         cursor: pointer;
     }

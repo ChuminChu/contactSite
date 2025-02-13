@@ -32,6 +32,7 @@ public class ProgrammerQueryRepository {
                 )
                 // 좋아요 순 정렬 (내림차순)
                 .orderBy(programmer.likeCount.desc())
+                //정렬안하면 좋아요순ㅇ,로 정렬해요
                 .fetch();
     }
 
