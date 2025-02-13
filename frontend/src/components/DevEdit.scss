@@ -1,0 +1,14 @@
+.btnContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: inherit;
+
+  .cancelButton {
+    background-color: red;
+    color: white;
+  }
+
+  .cancelButton:hover {
+    background-color: darkred;
+  }
+}
