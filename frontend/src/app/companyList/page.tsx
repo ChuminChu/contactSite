@@ -9,7 +9,7 @@ import {useSearchParams} from "next/navigation";
 import {CompanyList} from "@/components/companyList";
 
 
-interface Company {
+export interface Company {
     id: string;
     name: string;
     field: string;
@@ -392,6 +392,7 @@ export default function CompanyListPage() {
                     {/*    </tbody>*/}
 
                     {/*</table>*/}
+
                     <CompanyList companies={companies} />
                     <div className={styles.pagination}>
                         <button className={styles.button}

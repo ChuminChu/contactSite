@@ -6,12 +6,14 @@ import MainImage from "./index/MainImage";
 import DevCarousel from "./index/DevCarousel";
 import CopList from "./index/CopList";
 
-export default function IndexPage() {
+export default async function IndexPage() {
+  const response = await fetch('http://localhost:8080/companies');
+  const companies = await response.json()
   return (
     <>
     <MainImage/>
     <DevCarousel/>
-    <CopList/>
+    <CopList companies={companies}/>
     </>
   );
 }
