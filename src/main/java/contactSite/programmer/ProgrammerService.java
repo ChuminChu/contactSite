@@ -28,6 +28,7 @@ public class ProgrammerService {
         this.likeRepository = likeRepository;
     }
 
+    @Transactional
     public ProgrammerResponse create(ProgrammerCreateRequest programmerRequest) {
         Programmer programmer = programmerRepository.save(new Programmer(
                 programmerRequest.userId(),
