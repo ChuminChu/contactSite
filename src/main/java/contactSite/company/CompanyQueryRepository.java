@@ -1,6 +1,7 @@
 package contactSite.company;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import contactSite.Field;
 import org.springframework.stereotype.Repository;
@@ -19,8 +20,11 @@ public class CompanyQueryRepository {
 
     public List<Company> findAll(
             List<Field> fieldNames,  //선택 분야
-            String address      //선택 지역
+            String address,      //선택 지역
+            int pageNumber,
+            int size
     ){
+
         return jpaQueryFactory
                 .selectFrom(company)
                 .where(
@@ -32,6 +36,13 @@ public class CompanyQueryRepository {
                 //좋아요 순 정렬(내림차순)
                 .orderBy(company.likeCount.desc())
                 .fetch();
+    }
+
+    public long count(){
+        return jpaQueryFactory
+                .select(Wildcard.count)
+                .from(company)
+                .fetchOne();
     }
 
     //분야 다중 선택

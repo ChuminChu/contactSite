@@ -28,9 +28,12 @@ public class CompanyController {
 
     //간단 조회(목록조회)
     @GetMapping("/companies")
-    public List<CompanyResponse> findAll(@RequestParam(required = false) List<Field> field,
-                                         @RequestParam(required = false) String address) {
+    public PageResponse findAll(@RequestParam(required = false) List<Field> field,
+                                @RequestParam(required = false) String address,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "5") int size) {
 //        return companyService.findAll(field,address);
+
         List<CompanyResponse> companies = List.of(
                 new CompanyResponse("C1", "Tech Innovators", Field.Front_End, "1234 Silicon Valley, CA", 120),
                 new CompanyResponse("C2", "Green World", Field.Front_End, "789 Green Street, NY", 150),
@@ -53,11 +56,18 @@ public class CompanyController {
                 new CompanyResponse("C19", "Future Foods", Field.Full_Stack, "876 Veggie Lane, CA", 140),
                 new CompanyResponse("C20", "Space Innovations", Field.Full_Stack, "999 Rocket Rd, TX", 190)
         );
-        if (field !=null && field.size() > 0){
-            return companies.stream().filter(c -> field.contains(c.field()))
-                    .toList();
-        }
-    return companies;
+
+//        if (field != null && field.size() > 0) {
+//            return companies.stream()
+//                    .filter(c -> field.contains(c.field()))
+//                    .toList()
+//                    .subList((page - 1) * size, page * size);
+//        }
+//        return companies.subList((page - 1) * size, page * size);
+
+
+        return new PageResponse();
+
     }
 
     //상세조회 - 기업
