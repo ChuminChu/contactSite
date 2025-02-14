@@ -8,12 +8,12 @@ import CopList from "./index/CopList";
 
 export default async function IndexPage() {
   const response = await fetch('http://localhost:8080/companies');
-  const companies = await response.json()
+  const companiesResponse = await response.json()
   return (
     <>
     <MainImage/>
     <DevCarousel/>
-    <CopList companies={companies}/>
+    <CopList companyList={companiesResponse}/>
     </>
   );
 }
