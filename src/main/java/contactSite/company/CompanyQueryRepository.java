@@ -35,6 +35,8 @@ public class CompanyQueryRepository {
                 )
                 //좋아요 순 정렬(내림차순)
                 .orderBy(company.likeCount.desc())
+                .limit(size)
+                .offset((pageNumber - 1) * size)
                 .fetch();
     }
 

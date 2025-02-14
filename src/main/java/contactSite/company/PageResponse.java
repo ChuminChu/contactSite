@@ -3,7 +3,7 @@ package contactSite.company;
 import java.util.List;
 
 public record PageResponse(
-        int totalPage,
+        Long totalPage,
         int pageNumber,
         List<CompanyResponse> companies
 ) {
