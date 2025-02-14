@@ -1,7 +1,28 @@
 import styles from "@/app/companyList/page.module.css";
-import {CompanyPage} from "@/app/companyList/page";
+import {Company} from "@/app/companyList/page";
+import Link from "next/link";
 
-export function CompanyList(props) {
+
+
+export function CompanyPage(company: Company) {
+    return (
+        <tr>
+            <td>
+                <Link className="dev" href={`/companyProfile/${company.id}`}>
+                    {company.name}
+                </Link>
+            </td>
+            <td>{company.field}</td>
+            <td>{company.employeeCount}</td>
+            <td>{company.address}</td>
+            <td>{company.likeCount}</td>
+        </tr>
+
+    )
+}
+
+export function CompanyList(props: { companies: Company[] }) {
+    console.log(props.companies);
     return (
         <section>
             <table className={styles.table}>
@@ -27,36 +48,6 @@ export function CompanyList(props) {
                         likeCount={company.likeCount}/>)}
                 </tbody>
             </table>
-
-            {/*<div className={styles.pagination}>*/}
-            {/*    <button className={styles.button}*/}
-            {/*            onClick={이전버튼클릭시}*/}
-            {/*            disabled={currentPage === 1}>*/}
-            {/*        이전*/}
-            {/*    </button>*/}
-
-            {/*    {getPageNumbers().map((page, index) =>*/}
-            {/*        page === "..." ? (*/}
-            {/*            <span key={`ellipsis-${index}`} className={styles.ellipsis}>...</span>*/}
-            {/*        ) : (*/}
-            {/*            <button*/}
-            {/*                key={`page-${page}`}*/}
-            {/*                onClick={() => setCurrentPage(page)}*/}
-            {/*                className={currentPage === page ? styles.activePage : ""}*/}
-            {/*            >*/}
-            {/*                {page}*/}
-            {/*            </button>*/}
-            {/*        )*/}
-            {/*    )}*/}
-
-
-            {/*    <button className={styles.button}*/}
-            {/*            onClick={다음버튼클릭시}*/}
-            {/*            disabled={currentPage === totalPages}>*/}
-            {/*        다음*/}
-            {/*    </button>*/}
-            {/*</div>*/}
-
         </section>
 
 
