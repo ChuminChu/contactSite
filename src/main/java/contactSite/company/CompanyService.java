@@ -64,7 +64,7 @@ public class CompanyService {
 
         long totalpagecount = (count + size - 1) / size;
 
-        return new PageResponse();
+        return new PageResponse(totalpagecount,count,list);
     }
 
 

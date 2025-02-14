@@ -3,8 +3,8 @@ package contactSite.company;
 import java.util.List;
 
 public record PageResponse(
-        int totalPage,
-        int pageNumber,
+        Long totalPage,
+        Long pageNumber,
         List<CompanyResponse> companies
 ) {
 
