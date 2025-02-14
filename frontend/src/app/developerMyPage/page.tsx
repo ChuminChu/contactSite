@@ -1,5 +1,6 @@
 import DevProfile from "@/components/DevProfile";
 import Link from "next/link";
+import { getAuthToken } from "@/app/login/actions";
 
 interface Developer {
   id: string;
@@ -14,8 +15,7 @@ interface Developer {
 }
 
 export async function getDevSelf(): Promise<Developer[]> {
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQMSIsImlhdCI6MTczOTQwOTc2MywiZXhwIjoxNzM5NDUyOTYzfQ.W1Xiv2o3UNGe4L1IqLVGWHD5PSisEdQR2JuwHjPjnhI";
+  const token = await getAuthToken(); // 서버 액션 호출
 
   const res = await fetch(`http://localhost:8080/programmers/my`, {
     headers: {

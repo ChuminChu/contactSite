@@ -4,6 +4,7 @@ import "./DevEdit.scss";
 import Link from "next/link";
 import { router } from "next/client";
 import { redirect } from "next/navigation";
+import { getAuthToken } from "@/app/login/actions";
 
 async function updateDeveloper(formData: FormData) {
   "use server"; // 서버 액션 사용
@@ -18,8 +19,7 @@ async function updateDeveloper(formData: FormData) {
     certificate: formData.get("certificate"),
   };
 
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQMSIsImlhdCI6MTczOTQwOTc2MywiZXhwIjoxNzM5NDUyOTYzfQ.W1Xiv2o3UNGe4L1IqLVGWHD5PSisEdQR2JuwHjPjnhI";
+  const token = await getAuthToken(); // 서버 액션 호출
 
   // ✅ 서버 API 호출
   const res = await fetch("http://localhost:8080/programmers/my", {

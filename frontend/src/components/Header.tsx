@@ -42,7 +42,7 @@ export default async function Header() {
               <>
                 <ProposalToggle token={token || ""} />
 
-                <Link href={""}>
+                <Link href={"/login"}>
                   {userType === "developer" ? (
                     <FaUser />
                   ) : userType === "businessmen" ? (

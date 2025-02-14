@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DevItem from "@/components/DevItem";
 import "./developer.page.scss";
+import { getAuthToken } from "@/app/login/actions";
 
 interface Programmer {
   id: string;
@@ -32,8 +33,7 @@ export default function DeveloperListPage() {
   };
 
   const fetchDevs = async () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQMSIsImlhdCI6MTczOTQwOTc2MywiZXhwIjoxNzM5NDUyOTYzfQ.W1Xiv2o3UNGe4L1IqLVGWHD5PSisEdQR2JuwHjPjnhI";
+    const token = await getAuthToken(); // 서버 액션 호출
 
     const res = await fetch(
       `http://localhost:8080/programmers?field=${fields}&personalHistory=${personalHistory}`,

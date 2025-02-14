@@ -1,7 +1,7 @@
 import DevProfile from "@/components/DevProfile";
 import "./devDetail.page.scss";
-import { LuMessageCircleHeart } from "react-icons/lu";
 import MessageButton from "@/components/MessageButton";
+import { getAuthToken } from "@/app/login/actions";
 
 interface Developer {
   id: string;
@@ -14,9 +14,9 @@ interface Developer {
   certificate: string;
 }
 
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQMSIsImlhdCI6MTczOTMyNDc5NCwiZXhwIjoxNzM5MzY3OTk0fQ.gv-gB9DB-ij94rkXWJtC4HWcxahEwRvtBUhxQ3NeWkU";
 async function getDev(devId: string): Promise<Developer[]> {
+  const token = await getAuthToken();
+
   const res = await fetch(`http://localhost:8080/programmers/${devId}`, {
     headers: {
       "Content-Type": "application/json",
@@ -36,6 +36,7 @@ export default async function DeveloperDetailPage({
   const devId = (await params).devId;
   const myId = "";
   const developer = await getDev(devId);
+  const token = await getAuthToken();
 
   return (
     <div className="container">
