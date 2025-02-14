@@ -11,11 +11,14 @@ export default async function userPage() {
   if (useType === "notLoggedIn") {
     redirect("/");
   }
+    const response = await fetch('http://localhost:8080/companies');
+    const companiesResponse = await response.json()
+
   return (
     <>
       <MainImage />
       <DevCarousel />
-      <CopList />
+      <CopList companyList={companiesResponse}/>
     </>
   );
 }
