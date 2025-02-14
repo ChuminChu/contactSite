@@ -13,8 +13,10 @@ interface Company {
     likeCount: number;
 }
 
-export default function CopList(props) {
-    const [companies, setCompanies] = useState<Company[]>(props.companies);
+
+export default function CopList(props: { companyList: { companies: Company[]; totalPage: number; currentPage: number } }) {
+    const [companies, setCompanies] = useState<Company[]>(props.companyList.companies);
+    const [page, setPage] = useState({totalPages: 0, currentPage: 1});
 
     return (
         <div className="container">
@@ -23,7 +25,11 @@ export default function CopList(props) {
                 <p></p>
             </header>
             <CompanyList companies={companies}/>
-            <PageButtons totalPage={100} currentPage={2} setCompanies={setCompanies}/>
+            <PageButtons totalPage={page.totalPages}
+                         currentPage={page.currentPage}
+                         setCompanies={setCompanies}
+                         setPage={setPage}
+            />
         </div>
     );
 }
