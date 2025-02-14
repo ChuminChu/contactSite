@@ -1,11 +1,11 @@
 .table{
-    width: 60%; /* 테이블 너비 설정 (필요에 따라 조절) */
+    width: 80%; /* 테이블 너비 설정 (필요에 따라 조절) */
     margin: 0 auto; /* 테이블을 수평 중앙 정렬 */
     border-collapse: separate;
     border-spacing: 0 50px; /* 세로 간격 10px 추가 (행 간격) */
     /*border: 1px solid #ddd;*/
     /*border-radius: 10px;*/
-    table-layout: fixed; /* 테이블 셀 크기 고정 */
+    table-layout: auto;
     word-wrap: break-word; /* 긴 텍스트 줄바꿈 */
 }
 
@@ -19,8 +19,9 @@
 }
 
 .table td.content{
-    width: 300px;
+    width: 500px;
     padding-left: 10px;
+    white-space: nowrap;
 }
 
 
@@ -36,3 +37,25 @@
 .table td{
     padding: 20px;
 }
+
+.option{
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    padding: 50px;
+    /*margin-right: 400px;*/
+}
+
+.option button{
+    border: none;
+    background-color: #5588FF;
+    padding: 8px 50px;
+    flex: 1; /* 버튼의 너비를 동일하게 설정 */
+    max-width: 200px; /* 버튼의 최대 너비를 설정하여 너무 커지지 않도록 */
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
