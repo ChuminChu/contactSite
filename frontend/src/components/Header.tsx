@@ -1,4 +1,3 @@
-
 //"use client";
 
 //import React, { useState } from "react";
@@ -7,8 +6,8 @@ import {FaSignInAlt, FaUser, FaComment, FaBuilding} from "react-icons/fa";
 import {getUserType, setUserType} from "@/app/userTypeUtils";
 
 export default async function Header() {
-  await setUserType(); // 서버에서 userType 설정
-  const userType = getUserType(); // 전역 userType 가져오기
+    await setUserType(); // 서버에서 userType 설정
+    const userType = getUserType(); // 전역 userType 가져오기
 
   //const authState: string = "notLoggedIn";
   return (

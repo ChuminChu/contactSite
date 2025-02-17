@@ -1,4 +1,3 @@
-
 import "../app.page.scss";
 
 import MainImage from "@/app/index/MainImage";
