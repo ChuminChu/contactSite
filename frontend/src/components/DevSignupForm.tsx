@@ -1,23 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./DevSignupForm.scss";
+import { FaStarOfLife } from "react-icons/fa";
 
 export function DevSignupForm() {
   const [userId, setUserId] = useState("");
+  const [isIdAvailable, setIsIdAvailable] = useState<boolean | null>(null); // 아이디 중복 확인 결과 상태 추가
   const [password, setPassword] = useState("");
+  const [checkPassword, setCheckPassword] = useState("");
+  const [passwordCheckMSG, setPasswordCheckMSG] = useState(""); // 일치하지 않는 비밀번호 메시지
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  // const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [personalHistory, setPersonalHistory] = useState(0);
   const [fieldName, setFieldName] = useState<string[]>([]);
   const [selfIntroduction, setSelfIntroduction] = useState("");
   const [certificate, setCertificate] = useState("");
   const router = useRouter();
+
+  // 아이디 중복 확인 함수
+  const checkIdDuplication = async () => {
+    if (!userId) {
+      alert("아이디를 입력하세요!");
+      return;
+    }
+
+    const response = await fetch("http://localhost:8080/programmers/check-id", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+
+    if (data.available) {
+      setIsIdAvailable(true);
+      alert("사용 가능한 아이디입니다.");
+    } else {
+      setIsIdAvailable(false);
+      alert("이미 사용 중인 아이디입니다.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,13 +71,6 @@ export function DevSignupForm() {
         certificate,
       }),
     });
-    // const response = await fetch('http://localhost:8080/posts', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ title, content, boardId }),
-    // })
 
     if (response.ok) {
       router.push(`/login`);
@@ -59,6 +79,22 @@ export function DevSignupForm() {
     }
   };
 
+  useEffect(() => {
+    validatePassword();
+  }, [password, checkPassword]);
+
+  // 비밀번호 확인 처리
+  const validatePassword = () => {
+    if (checkPassword === "") {
+      setPasswordCheckMSG(""); // 비밀번호 확인 칸이 비어있을 때 메시지 없음
+    } else if (password === checkPassword) {
+      setPasswordCheckMSG("✔ 비밀번호가 일치합니다."); // 초록색 메시지
+    } else {
+      setPasswordCheckMSG("❌ 비밀번호가 일치하지 않습니다."); // 빨간색 경고 메시지
+    }
+  };
+
+  // 체크박스 선택 처리
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     if (checked) {
@@ -68,40 +104,76 @@ export function DevSignupForm() {
     }
   };
 
+  const fieldOptions = [
+    { label: "풀스택", value: "Full_Stack" },
+    { label: "프론트엔드", value: "Front_End" },
+    { label: "백엔드", value: "Back_End" },
+    { label: "DB 매니저", value: "DBManege" },
+    { label: "서버 매니저", value: "ServerMange" },
+  ];
+
   return (
     <form onSubmit={handleSubmit} className="formContainer">
       <div className="formLayout">
         <label htmlFor="userId" className="label">
           아이디
+          <FaStarOfLife className={"require"} />
         </label>
-        <input
-          type="text"
-          id="userId"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          required
-          className={"inputId"}
-        />
-
+        <div className={"userId"}>
+          <input
+            type="text"
+            id="userId"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            required
+            className={"inputId"}
+          />
+          <button type="button" onClick={checkIdDuplication}>
+            중복 확인
+          </button>
+        </div>
         <label htmlFor="password" className={"label"}>
           비밀번호
+          <FaStarOfLife className={"require"} />
         </label>
         <input
           type="password"
           id="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
           required
           className={"input"}
         />
-
-        <label htmlFor="password" className={"label"}>
+        <label htmlFor="checkPassword" className={"label"}>
           비밀번호 확인
+          <FaStarOfLife className={"require"} />
         </label>
-        <input type="password" id="password" required className={"input"} />
-
+        <div className={"checkPassword"}>
+          <input
+            type="password"
+            id="checkPassword"
+            value={checkPassword}
+            onChange={(e) => {
+              setCheckPassword(e.target.value);
+            }}
+            required
+            className={"input"}
+          />
+          {passwordCheckMSG && (
+            <p
+              className={
+                password === checkPassword ? "success-message" : "error-message"
+              }
+            >
+              {passwordCheckMSG}
+            </p>
+          )}
+        </div>
         <label htmlFor="name" className={"label"}>
           이름
+          <FaStarOfLife className={"require"} />
         </label>
         <input
           type="text"
@@ -111,21 +183,29 @@ export function DevSignupForm() {
           required
           className={"input"}
         />
-
         <label htmlFor="birthDate" className={"label"}>
           생년월일
+          <FaStarOfLife className={"require"} />
         </label>
         <div className={"birth"}>
           <div className={"year"}>
-            <input
-              type="number"
-              placeholder="년(4자)"
+            <select
               id="year"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required
               className={"inputBirth"}
-            />
+            >
+              <option disabled={true} value=""></option>
+              {Array.from(
+                { length: 101 },
+                (_, i) => new Date().getFullYear() - i,
+              ).map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
             <span> 년</span>
           </div>
 
@@ -137,18 +217,12 @@ export function DevSignupForm() {
               required
               className={"inputBirth"}
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
+              <option disabled={true} value=""></option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
             </select>
             <span> 월</span>
           </div>
@@ -165,7 +239,6 @@ export function DevSignupForm() {
             <span> 일</span>
           </div>
         </div>
-
         <label htmlFor="email" className={"label"}>
           이메일
         </label>
@@ -178,7 +251,6 @@ export function DevSignupForm() {
           required
           className={"input"}
         />
-
         <label htmlFor="personalHistory" className={"label"}>
           경력 (년)
         </label>
@@ -194,63 +266,25 @@ export function DevSignupForm() {
           />
           <span> 년</span>
         </div>
-
         <label htmlFor="fieldName" className={"label"}>
           분야
         </label>
-        <div className={"field"}>
-          <div className={"checkboxContainer"}>
-            <label htmlFor="fieldName" className={"checkboxLabel"}>
-              풀스택
-            </label>
-            <input
-              type="checkbox"
-              value="Full_Stack"
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className={"checkboxContainer"}>
-            <label htmlFor="fieldName" className={"checkboxLabel"}>
-              프론트엔드
-            </label>
-            <input
-              type="checkbox"
-              value="Front_End"
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className={"checkboxContainer"}>
-            <label htmlFor="fieldName" className={"checkboxLabel"}>
-              백엔드
-            </label>
-            <input
-              type="checkbox"
-              value="Back_End"
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className={"checkboxContainer"}>
-            <label htmlFor="fieldName" className={"checkboxLabel"}>
-              DB 매니저
-            </label>
-            <input
-              type="checkbox"
-              value="DBManage"
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className={"checkboxContainer"}>
-            <label htmlFor="fieldName" className={"checkboxLabel"}>
-              서버 매니저
-            </label>
-            <input
-              type="checkbox"
-              value="ServerManage"
-              onChange={handleCheckboxChange}
-            />
-          </div>
+        <div className="field">
+          {fieldOptions.map((field) => (
+            <div className="checkboxContainer" key={field.value}>
+              <input
+                type="checkbox"
+                value={field.value}
+                id={field.value}
+                onChange={handleCheckboxChange}
+              />
+              <label htmlFor={field.value} className="checkboxLabel">
+                {field.label}
+              </label>
+            </div>
+          ))}
         </div>
-
+        ;
         <label htmlFor="selfIntroduction" className={"label"}>
           자기 소개
         </label>
@@ -261,7 +295,6 @@ export function DevSignupForm() {
           required
           className={"textareaSelf"}
         ></textarea>
-
         <label htmlFor="certificate" className={"label"}>
           자격증
         </label>

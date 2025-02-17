@@ -23,3 +23,8 @@ export async function handleSubmit(formData: FormData) {
   // 로그인 성공 후 리다이렉션
   redirect("/user");
 }
+
+export async function getAuthToken() {
+  const cookieStore = await cookies();
+  return cookieStore.get("token")?.value || "";
+}

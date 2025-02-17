@@ -1,145 +1,175 @@
-"use client"
+"use client";
+
+import { useEffect, useState } from "react";
 import DevItem from "@/components/DevItem";
 import "./developer.page.scss";
+import { getAuthToken } from "@/app/login/actions";
+
+interface Programmer {
+  id: string;
+  name: string;
+  age: number;
+  fieldName: string[];
+  isLiked: boolean;
+  likeCount: number;
+}
 
 export default function DeveloperListPage() {
-  const dev_info = [
-    {
-      id: 1,
-      img_url : "@/images/img01.jpg",
-      name : "추민영",
-      rating : 24,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 2,
-      img_url : "@/images/img02.jpg",
-      name : "전지예",
-      rating : 27,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 3,
-      img_url : "@/images/img03.jpg",
-      name : "황승혁",
-      rating : 22,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 4,
-      img_url : "@/images/img04.jpg",
-      name : "문성희",
-      rating : 47,
-      dev_pos : "풀스텍 개발자"
-    },
-    {
-      id: 5,
-      img_url : "@/images/img05.jpg",
-      name : "문인혁",
-      rating : 22,
-      dev_pos : "프론트 개발자"
-    },
-    {
-      id: 6,
-      img_url : "@/images/img06.jpg",
-      name : "김민성",
-      rating : 43,
-      dev_pos : "백엔드 개발자"
-    },{
-      id: 7,
-      img_url : "@/images/img07.jpg",
-      name : "홍길동",
-      rating : 18,
-      dev_pos : "퍼블리셔"
-    },
-    {
-      id: 8,
-      img_url : "@/images/img08.jpg",
-      name : "김복만",
-      rating : 12,
-      dev_pos : "디자이너"
-    },
-    {
-      id: 9,
-      img_url : "@/images/img01.jpg",
-      name : "추민영",
-      rating : 24,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 10,
-      img_url : "@/images/img02.jpg",
-      name : "전지예",
-      rating : 27,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 11,
-      img_url : "@/images/img03.jpg",
-      name : "황승혁",
-      rating : 22,
-      dev_pos : "백엔드 개발자"
-    },
-    {
-      id: 12,
-      img_url : "@/images/img04.jpg",
-      name : "문성희",
-      rating : 47,
-      dev_pos : "풀스텍 개발자"
-    },
-    {
-      id: 13,
-      img_url : "@/images/img05.jpg",
-      name : "문인혁",
-      rating : 22,
-      dev_pos : "프론트 개발자"
-    },
-    {
-      id: 14,
-      img_url : "@/images/img06.jpg",
-      name : "김민성",
-      rating : 43,
-      dev_pos : "백엔드 개발자"
-    },{
-      id: 15,
-      img_url : "@/images/img07.jpg",
-      name : "홍길동",
-      rating : 18,
-      dev_pos : "퍼블리셔"
-    },
-    {
-      id: 16,
-      img_url : "@/images/img08.jpg",
-      name : "김복만",
-      rating : 12,
-      dev_pos : "디자이너"
-    },
-  ]
+  const [programmers, setProgrammers] = useState<Programmer[]>([]);
+  const [fields, setFields] = useState<string[]>([]);
+  const [personalHistory, setPersonalHistory] = useState(0);
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setFields([...fields, value]); // 체크되면 리스트에 추가
+    } else {
+      setFields(fields.filter((field) => field !== value)); // 해제하면 리스트에서 제거
+    }
+  };
+
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalHistory(Number(e.target.value));
+  };
+
+  const fetchDevs = async () => {
+    const token = await getAuthToken(); // 서버 액션 호출
+
+    const res = await fetch(
+      `http://localhost:8080/programmers?field=${fields}&personalHistory=${personalHistory}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      },
+    );
+
+    if (!res.ok) throw new Error("Failed to fetch devs");
+    const data = await res.json();
+    setProgrammers(data);
+  };
+
+  useEffect(() => {
+    fetchDevs(); // 최초 1회 실행
+  }, []);
+
+  const experiences = [
+    { value: 0, label: "신입" },
+    { value: 3, label: "3년 이상" },
+    { value: 5, label: "5년 이상" },
+    { value: 10, label: "10년 이상" },
+    { value: 15, label: "15년 이상" },
+  ];
+
   return (
-    <>
-      <div className="search search-dev">
-        <header>
-          검색창
-        </header>
-        <section>검색옵션</section>
+    <div className="container devlist">
+      <div className="search">
+        <div className={"select-options"}>
+          <label className={"label"}>검색 옵션</label>
+          <div className={"phcontainer"}>
+            <label className={"label"}>경력</label>
+            <div className={"personalHistory"}>
+              {experiences.map((exp) => (
+                <div className="checkboxContainer" key={exp.value}>
+                  <input
+                    type="radio"
+                    value={exp.value}
+                    id={`exp-${exp.value}`} // ID 중복 방지
+                    name="personalHistory"
+                    onChange={handleRadioChange}
+                  />
+                  <label htmlFor={`exp-${exp.value}`} className="checkboxLabel">
+                    {exp.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={"fieldContainer"}>
+            <label className={"label"}>분야</label>
+            <div className={"field"}>
+              <div className={"checkboxContainer"}>
+                <input
+                  type="checkbox"
+                  value="Full_Stack"
+                  id="full"
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="full" className={"checkboxLabel"}>
+                  풀스택
+                </label>
+              </div>
+              <div className={"checkboxContainer"}>
+                <input
+                  type="checkbox"
+                  value="Front_End"
+                  id="front"
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="front" className={"checkboxLabel"}>
+                  프론트엔드
+                </label>
+              </div>
+              <div className={"checkboxContainer"}>
+                <input
+                  type="checkbox"
+                  value="Back_End"
+                  id="back"
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="back" className={"checkboxLabel"}>
+                  백엔드
+                </label>
+              </div>
+              <div className={"checkboxContainer"}>
+                <input
+                  type="checkbox"
+                  value="DBManege"
+                  id="db"
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="db" className={"checkboxLabel"}>
+                  DB 매니저
+                </label>
+              </div>
+              <div className={"checkboxContainer"}>
+                <input
+                  type="checkbox"
+                  value="ServerMange"
+                  id="server"
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="server" className={"checkboxLabel"}>
+                  서버 매니저
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button className="button" onClick={fetchDevs}>
+          조회
+        </button>
       </div>
       <div className="container devlist">
         <header>
           <h3>개발자 목록</h3>
         </header>
         <section>
-          {dev_info.map((dev)=>(
-            <DevItem 
-              key={dev.id}
-              devName={dev.name}
-              likesRating={dev.rating}
-              position={dev.dev_pos}
-              path={dev.img_url}
+          {programmers.map((programmer) => (
+            <DevItem
+              key={programmer.id}
+              id={programmer.id}
+              name={programmer.name}
+              age={programmer.age}
+              field={programmer.fieldName}
+              isLiked={programmer.isLiked}
+              likeCount={programmer.likeCount}
             />
           ))}
         </section>
       </div>
-    </>
-    
+    </div>
   );
 }

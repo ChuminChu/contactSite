@@ -2,15 +2,21 @@
 
 //import React, { useState } from "react";
 import Link from "next/link";
-import {FaSignInAlt, FaUser, FaComment, FaBuilding} from "react-icons/fa";
-import {getUserType, setUserType} from "@/app/userTypeUtils";
+import { FaSignInAlt, FaUser, FaBuilding } from "react-icons/fa";
+import { getUserType, setUserType } from "@/app/userTypeUtils";
+import { cookies } from "next/headers";
+
+import ProposalToggle from "@/components/ProposalToggle";
 
 export default async function Header() {
-    await setUserType(); // 서버에서 userType 설정
-    const userType = getUserType(); // 전역 userType 가져오기
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value; // 쿠키에서 token을 가져옴
 
-  //const authState: string = "notLoggedIn";
+  await setUserType(); // 서버에서 userType 설정
+  const userType = getUserType(); // 전역 userType 가져오기
+
   return (
+    <>
       <div className="hdrWrap">
         <header>
           <h1 className="logo">
@@ -26,30 +32,28 @@ export default async function Header() {
           </ul>
           <div className="utilBox">
             {userType === "notLoggedIn" && (
-                <>
-                  <Link href={"/login"}>
-                    <FaSignInAlt/>
-                  </Link>
-                </>
+              <>
+                <Link href={"/login"}>
+                  <FaSignInAlt />
+                </Link>
+              </>
             )}
             {(userType === "developer" || userType === "businessmen") && (
-                <>
-                  <Link href={""}>
-                    <FaComment/>
-                  </Link>
+              <>
+                <ProposalToggle token={token || ""} />
 
+                <Link href={"/login"}>
                   {userType === "developer" ? (
-
-                      <FaUser/>
+                    <FaUser />
                   ) : userType === "businessmen" ? (
-                      <Link href={"/companyMypage"}>
-                        <FaBuilding/>
-                      </Link>
+                    <FaBuilding />
                   ) : null}
-                </>
+                </Link>
+              </>
             )}
           </div>
         </header>
       </div>
+    </>
   );
 }
