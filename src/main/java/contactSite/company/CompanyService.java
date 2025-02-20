@@ -50,8 +50,8 @@ public class CompanyService {
 
 
     // 간단 조회 (목록 조회)
-    public List<CompanyResponse> findAll(List<Field> field, String address) {
-        return companyQueryRepository.findAll(field, address)
+    public PageResponse findAll(List<Field> field, String address, int page, int size) {
+        List<CompanyResponse> list = companyQueryRepository.findAll(field, address, page, size)
                 .stream()
                 .map(c -> new CompanyResponse(
                         c.getId(),
@@ -59,8 +59,14 @@ public class CompanyService {
                         c.getField(),
                         c.getAddress(),
                         c.getLikeCount()
-                        )).toList();
+                )).toList();
+        long count = companyQueryRepository.count();
+
+        long totalpagecount = (count + size - 1) / size;
+
+        return new PageResponse(totalpagecount,page,list);
     }
+
 
 
     //상세조회 - 기업 findbyid
