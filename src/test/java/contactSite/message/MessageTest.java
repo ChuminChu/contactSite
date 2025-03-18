@@ -62,7 +62,7 @@ public class MessageTest {
                         LocalDate.parse("2001-01-01"),
                         "emailtest@gmail.com",
                         1,
-                        List.of(Field.Back_End),
+                        List.of(Field.Back_End,Field.Front_End),
                         "안녕하세요",
                         "없음"))
                 .when()
@@ -250,7 +250,7 @@ public class MessageTest {
                 LocalDate.parse("2002-02-02"),
                 "chu@gmail.com",
                 2,
-                List.of(Field.Back_End),
+                List.of(Field.Back_End,Field.Front_End),
                 "한줄소개",
                 "없음");
 
@@ -378,7 +378,7 @@ public class MessageTest {
                 LocalDate.parse("2002-02-02"),
                 "chu@gmail.com",
                 2,
-                List.of(Field.Back_End),
+                List.of(Field.Back_End,Field.Front_End),
                 "한줄소개",
                 "없음");
 
@@ -528,7 +528,7 @@ public class MessageTest {
                 LocalDate.parse("2002-02-02"),
                 "chu@gmail.com",
                 2,
-                List.of(Field.Back_End),
+                List.of(Field.Back_End,Field.Front_End),
                 "한줄소개",
                 "없음");
 
@@ -713,7 +713,7 @@ public class MessageTest {
                 LocalDate.parse("2002-02-02"),
                 "chu@gmail.com",
                 2,
-                List.of(Field.Back_End),
+                List.of(Field.Back_End,Field.Front_End),
                 "한줄소개",
                 "없음");
 
