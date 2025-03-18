@@ -1,20 +1,35 @@
-export default function CopList() {
-  return (
-    <div className="container">
-      <header>
-        <h3>기업 리스트</h3>
-        <p></p>
-      </header>
-      <section>
-        <ul className="cop-th">
-          <li>연번</li>
-          <li>기업명</li>
-          <li>구인분야</li>
-          <li>직원수</li>
-          <li>기업소재지</li>
-          <li>좋아요</li>
-        </ul>
-      </section>
-    </div>
-  );
+"use client"
+
+import {useState} from "react";
+import {CompanyList} from "@/components/companyList";
+import {PageButtons} from "@/components/page-buttons";
+
+interface Company {
+    id: string;
+    name: string;
+    field: string;
+    employeeCount: number;
+    address: string;
+    likeCount: number;
+}
+
+
+export default function CopList(props: { companyList: { companies: Company[]; totalPage: number; currentPage: number } }) {
+    const [companies, setCompanies] = useState<Company[]>(props.companyList.companies);
+    const [page, setPage] = useState({totalPages: 0, currentPage: 1});
+
+    return (
+        <div className="container">
+            <header>
+                <h3>기업 리스트</h3>
+                <p></p>
+            </header>
+            <CompanyList companies={companies}/>
+            <PageButtons totalPage={page.totalPages}
+                         currentPage={page.currentPage}
+                         setCompanies={setCompanies}
+                         setPage={setPage}
+            />
+        </div>
+    );
 }

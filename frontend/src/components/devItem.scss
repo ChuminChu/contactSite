@@ -17,6 +17,8 @@
 
     .posTap {
       display: flex;
+      flex-wrap: wrap;
+      gap: 0.1rem;
 
       li {
         font-size: 12px;
