@@ -4,6 +4,7 @@ import contactSite.Field;
 import contactSite.Login.LoginRequest;
 import contactSite.LoginUtils.AccessToken;
 import contactSite.LoginUtils.JwtProvider;
+import contactSite.programmer.dto.PageResponse;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
 import contactSite.programmer.dto.ProgrammerResponse;
@@ -383,6 +384,67 @@ public class programmerTest {
         assertEquals(35, person.getAge());
     }
 
+    @Test
+    void 페이지테스트() {
+        ProgrammerResponse 개발자 = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new ProgrammerCreateRequest(
+                        "userId1234",
+                        "abcDEF123!",
+                        "chu",
+                        LocalDate.parse("2001-01-01"),
+                        "emailtest@gmail.com",
+                        1,
+                        List.of(Field.Back_End,Field.Front_End),
+                        "안녕하세요",
+                        "없음"))
+                .when()
+                .post("/programmers")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(ProgrammerResponse.class);
 
-}
+        //로그인
+        AccessToken token = RestAssured
+                .given().log().all()
+                .contentType(ContentType.JSON)
+                .body(new LoginRequest(
+                        "userId1234",
+                        "abcDEF123!"))
+                .when()
+                .post("/login/programmer")
+                .then().log().all()
+                .statusCode(200)
+                .extract()
+                .as(AccessToken.class);
+
+
+        // 개발자 목록 조회 요청
+            PageResponse response = RestAssured
+                    .given().log().all()
+                    .contentType(ContentType.JSON)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.token())
+                    .queryParam("page", 1)
+                    .queryParam("size", 8)
+                    .when()
+                    .get("/programmers")
+                    .then().log().all()
+                    .statusCode(200) // 페이지가 정상적으로 응답했는지 확인
+                    .extract()
+                    .as(PageResponse.class);
+
+            // 페이징 관련 응답 검증
+            assertThat(response.totalPages()).isGreaterThan(0); // 총 페이지 수가 0보다 커야 함
+            assertThat(response.currentPage()).isEqualTo(0); // 요청한 페이지와 응답이 일치해야 함
+            assertThat(response.pageSize()).isEqualTo(8); // 요청한 사이즈와 응답이 일치해야 함
+
+            // 응답 리스트가 정상적으로 존재하는지 확인
+            assertThat(response.programmerReadResponses()).isNotNull();
+
+
+        }
+    }
+
 

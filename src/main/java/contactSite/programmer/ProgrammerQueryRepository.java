@@ -3,6 +3,7 @@ package contactSite.programmer;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import contactSite.Field;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class ProgrammerQueryRepository {
 
     public List<Programmer> findAll(
             List<Field> fieldNames,  // 선택된 분야들
-            Integer personalHistory   // 선택된 경력
+            Integer personalHistory,   // 선택된 경력
+            Pageable pageable
     ) {
         return jpaQueryFactory
                 .selectFrom(programmer)
@@ -32,7 +34,8 @@ public class ProgrammerQueryRepository {
                 )
                 // 좋아요 순 정렬 (내림차순)
                 .orderBy(programmer.likeCount.desc())
-                //정렬안하면 좋아요순ㅇ,로 정렬해요
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -53,5 +56,15 @@ public class ProgrammerQueryRepository {
     }
 
 
-
+    public long countFiltered(List<Field> fieldNames, Integer personalHistory, Pageable pageable) {
+        Long count = jpaQueryFactory
+                .select(programmer.count())
+                .from(programmer)
+                .where(
+                        fieldNameCriteria(fieldNames),
+                        personalHistoryCriteria(personalHistory)
+                )
+                .fetchOne();
+        return count != null ? count : 0L;
+    }
 }

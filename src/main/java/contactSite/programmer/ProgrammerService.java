@@ -2,12 +2,14 @@ package contactSite.programmer;
 
 import contactSite.Field;
 import contactSite.like.LikeRepository;
+import contactSite.programmer.dto.PageResponse;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
 import contactSite.programmer.dto.ProgrammerResponse;
 import contactSite.programmer.dto.create.ProgrammerCreateRequest;
 import contactSite.programmer.dto.read.ProgrammerDetailResponse;
 import contactSite.programmer.dto.read.ProgrammerReadResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,9 +59,9 @@ public class ProgrammerService {
     }
 
 
-    public List<ProgrammerReadResponse> findAll(String authorization, List<Field> field, Integer personalHistory) {
+    public PageResponse findAll(String authorization, List<Field> field, Integer personalHistory, Pageable pageable) {
 
-        List<Programmer> programmerList = programmerQueryRepository.findAll(field, personalHistory);
+        List<Programmer> programmerList = programmerQueryRepository.findAll(field, personalHistory, pageable);
         List<ProgrammerReadResponse> programmerReadResponses = new ArrayList<>();
 
         for (Programmer p : programmerList) {
@@ -74,7 +76,15 @@ public class ProgrammerService {
 
         }
 
-        return programmerReadResponses;
+        long totalCount = programmerQueryRepository.countFiltered(field, personalHistory, pageable);
+        int totalPage = (int) Math.ceil((double) (totalCount - 1) / pageable.getPageSize()) + 1;
+        return new PageResponse(
+                totalPage,
+                totalCount,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                programmerReadResponses
+        );
     }
 
 
