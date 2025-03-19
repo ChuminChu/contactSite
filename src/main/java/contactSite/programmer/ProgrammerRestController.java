@@ -2,12 +2,15 @@ package contactSite.programmer;
 
 import contactSite.Field;
 import contactSite.LoginUtils.LoginMember;
+import contactSite.programmer.dto.PageResponse;
 import contactSite.programmer.dto.ProgrammerPasswordRequest;
 import contactSite.programmer.dto.ProgrammerRequest;
 import contactSite.programmer.dto.create.ProgrammerCreateRequest;
 import contactSite.programmer.dto.ProgrammerResponse;
 import contactSite.programmer.dto.read.ProgrammerDetailResponse;
 import contactSite.programmer.dto.read.ProgrammerReadResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,10 +32,13 @@ public class ProgrammerRestController {
 
     //간단한 조회
     @GetMapping("/programmers")
-    public List<ProgrammerReadResponse> findAll(@LoginMember String authorization,
-                                                @RequestParam List<Field> field,
-                                                @RequestParam Integer personalHistory){
-        return programmerService.findAll(authorization,field,personalHistory);
+    public PageResponse findAll(@LoginMember String authorization,
+                                @RequestParam(required = false) List<Field> field,
+                                @RequestParam(required = false) Integer personalHistory,
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "8") int size){
+        Pageable pageable = PageRequest.of(page-1, size);
+        return programmerService.findAll(authorization,field,personalHistory,pageable);
     }
 
     //상세 조회
