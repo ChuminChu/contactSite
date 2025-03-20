@@ -36,7 +36,7 @@ public class ProgrammerRestController {
                                 @RequestParam(required = false) List<Field> field,
                                 @RequestParam(required = false) Integer personalHistory,
                                 @RequestParam(defaultValue = "1") int page,
-                                @RequestParam(defaultValue = "8") int size){
+                                @RequestParam(defaultValue = "30") int size){
         Pageable pageable = PageRequest.of(page-1, size);
         return programmerService.findAll(authorization,field,personalHistory,pageable);
     }

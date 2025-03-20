@@ -3,6 +3,7 @@ package contactSite.programmer;
 import contactSite.Field;
 import contactSite.LoginUtils.SecurityUtils;
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -41,6 +42,7 @@ public class Programmer {
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
+    @BatchSize(size = 30)
     private List<Field> fieldName;
 
     private String selfIntroduction;
