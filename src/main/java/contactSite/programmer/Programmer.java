@@ -41,8 +41,8 @@ public class Programmer {
     private int personalHistory;
 
     @ElementCollection
+    @CollectionTable(name = "programmer_field_name",indexes = @Index(name = "idx_programmer_field_name", columnList = "field_name"))
     @Enumerated(EnumType.STRING)
-    @BatchSize(size = 30)
     private List<Field> fieldName;
 
     private String selfIntroduction;
