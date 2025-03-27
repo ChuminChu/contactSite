@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { EventSourcePolyfill } from 'event-source-polyfill';
 import "./Proposal.scss";
 
 interface Message {
@@ -14,7 +15,7 @@ interface ProposalProps {
   token: string;
 }
 
-export default function Proposal({ type, token }: ProposalProps) {
+export default function Proposal({ type, token}: ProposalProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
@@ -52,10 +53,72 @@ export default function Proposal({ type, token }: ProposalProps) {
     }
   }, [token, type]);
 
-  // 체크박스를 통해 선택된 항목들 관리
+  useEffect(() => {
+    let eventSource;
+
+    const connectSSE = () => {
+      eventSource = new EventSourcePolyfill(
+          'http://localhost:8080/notifications',
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // 헤더에 토큰 전달
+            },
+            withCredentials: true,
+          }
+      );
+
+      // 연결 성공 핸들러
+      eventSource.addEventListener('open', () => {
+        console.log('🔌 SSE 연결 성공');
+      });
+
+
+      eventSource.addEventListener('notification', (event) => {  // 🔥 이벤트 이름 수정
+        try {
+          const eventData = JSON.parse(event.data);
+          console.log('📩 새로운 알림 도착:', eventData);
+          setMessages(prev => [eventData, ...prev]);
+        } catch (err) {
+          console.error('❌ JSON 파싱 실패:', err);
+        }
+      });
+
+      // 초기 연결 확인
+      eventSource.addEventListener('connection', (event) => {
+        console.log('📡 서버 연결 확인:', event.data);
+      });
+
+      // 에러 핸들링
+      eventSource.addEventListener('error', (error) => {
+        console.error('❌ SSE 오류:', error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+          console.log('🔌 연결 종료 상태');
+        }
+
+        // 3초 후 재연결 시도
+        setTimeout(() => {
+          console.log('🔄 재연결 시도...');
+          connectSSE();
+        }, 3000);
+      });
+    };
+
+    if (token) {
+      connectSSE();
+    }
+
+    // 컴포넌트 언마운트 시 정리
+    return () => {
+      if (eventSource) {
+        console.log('🔌 SSE 연결 종료');
+        eventSource.close();
+      }
+    };
+  }, [token]);
+
   const toggleSelection = (id: number) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
