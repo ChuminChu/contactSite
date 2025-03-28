@@ -37,12 +37,12 @@ public class MessageRestController {
         return response;
     }
 
-    @MessageMapping("/chat/{roomId}")
+  /*
+  //웹소켓
+  @MessageMapping("/chat/{roomId}")
     @SendTo("/topic/rooms/{roomId}")
     public void sendMessage(@LoginMember String senderId, @RequestBody MessageRequest request, @DestinationVariable Long roomId) {
-
-
-    }
+    }*/
 
     // 사용자가 보낸 전체 쪽지 조회
     @GetMapping("/messages/senders")
